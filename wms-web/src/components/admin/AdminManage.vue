@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin-bottom: 5px">
-      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">姓大 名：</span>
+      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">姓大名：</span>
       <el-input placeholder="请输入名字"
                 v-model="name"
                 suffix-icon="el-icon-search"
