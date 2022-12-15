@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/wms/springboot-vue-wms.iml" filepath="$PROJECT_DIR$/wms/springboot-vue-wms.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wms-web/wms-web.iml" filepath="$PROJECT_DIR$/wms-web/wms-web.iml" />
     </modules>
   </component>
 </project>
