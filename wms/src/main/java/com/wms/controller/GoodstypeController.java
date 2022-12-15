@@ -33,7 +33,7 @@ public class GoodstypeController {
         return goodstypeService.list();
     }
 
-    //新增或更新
+    //新增或更新dadae
     @PostMapping("/save")
     public Result save(@RequestBody Goodstype goodstype) {
         return goodstypeService.saveOrUpdate(goodstype) ? Result.scu() : Result.fail();

@@ -48,7 +48,7 @@ public class GoodsController {
     }
 
 
-    //更新
+    //更新 d
     @PostMapping("/update")
     public boolean update(@RequestBody Goods goods) {
         return goodsService.updateById(goods);
