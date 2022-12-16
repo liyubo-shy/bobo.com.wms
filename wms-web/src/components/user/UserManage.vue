@@ -68,9 +68,9 @@
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
-      <el-table-column prop="id" label="id" sortable width="120"></el-table-column>
-      <el-table-column prop="no" label="账号" sortable width="180"></el-table-column>
-      <el-table-column prop="name" label="姓名" sortable width="180"></el-table-column>
+      <el-table-column prop="id" label="id" sortable width="100"></el-table-column>
+      <el-table-column prop="no" label="账号" sortable width="130"></el-table-column>
+      <el-table-column prop="name" label="姓名" sortable width="130"></el-table-column>
       <el-table-column prop="sex" label="性别" sortable width="80">
         <template slot-scope="scope">
           <el-tag
@@ -80,8 +80,8 @@
         </template>
       </el-table-column>
       <el-table-column prop="age" label="年龄" sortable width="80"></el-table-column>
-      <el-table-column prop="phone" label="电话" sortable width="180"></el-table-column>
-      <el-table-column prop="roleId" label="角色" sortable width="140 ">
+      <el-table-column prop="phone" label="电话" sortable width="160"></el-table-column>
+      <el-table-column prop="roleId" label="角色" sortable width="120 ">
         <template slot-scope="scope">
           <el-tag
               :type="scope.row.roleId === 0 ? 'danger' : (scope.row.roleId === 1 ? 'success' : 'primary')"
@@ -89,7 +89,9 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="operation" label="操作">
+      <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>
+      <el-table-column prop="updateDate" label="更新时间" sortable width="180"></el-table-column>
+      <el-table-column prop="operation" label="操作" width="130" fixed="right">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" @click="mod(scope.row)" title="编辑"></el-button>
           <el-button type="danger" icon="el-icon-delete"  @click="del(scope.row.id,scope.row.name)" title="删除"></el-button>

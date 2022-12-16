@@ -49,11 +49,12 @@
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
-      <el-table-column prop="id" label="id" sortable width="120"></el-table-column>
+      <el-table-column prop="id" label="id" sortable width="100"></el-table-column>
       <el-table-column prop="name" label="仓库名" sortable width="260"></el-table-column>
-      <el-table-column prop="remark" label="备注" sortable width="500"></el-table-column>
-
-      <el-table-column prop="operation" label="操作">
+      <el-table-column prop="remark" label="备注" sortable width="400"></el-table-column>
+      <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>
+      <el-table-column prop="updateDate" label="更新时间" sortable width="180"></el-table-column>
+      <el-table-column prop="operation" label="操作" width="130" fixed="right">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" @click="mod(scope.row)" title="编辑"></el-button>
           <el-button type="danger" icon="el-icon-delete"  @click="del(scope.row.id,scope.row.name)" title="删除"></el-button>

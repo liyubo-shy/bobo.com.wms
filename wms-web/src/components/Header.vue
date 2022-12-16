@@ -5,7 +5,7 @@
          @click="collapse"></i>
     </div>
     <div style="flex: 1 ;font-size: 18px;color: white;">
-      <span style="margin-right: 650px"> 惟手熟尔</span>
+      <span style="margin-right: 650px">惟手熟尔</span>
     </div>
 
     <el-dropdown style="color: white" trigger="click">
