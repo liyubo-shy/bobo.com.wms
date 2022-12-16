@@ -332,7 +332,7 @@ export default {
     reSet() {
       this.name = '';
       this.sex = '';
-      this.loadPost()
+      // this.loadPost()
     },
 
     //新增

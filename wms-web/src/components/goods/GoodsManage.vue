@@ -320,7 +320,7 @@ export default {
     //重置参数
     reSet() {
       this.name = '';
-      this.loadPost()
+      // this.loadPost()
     },
 
     //新增
