@@ -29,7 +29,7 @@ public class Menu implements Serializable {
      * id
      */
     @TableId(type = IdType.AUTO)
-    private int id;
+    private Integer id;
 
     /**
      * 菜单编码
