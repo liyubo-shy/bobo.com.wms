@@ -9,7 +9,8 @@
                 @keyup.enter.native="search">
       </el-input>
 
-      <el-button style="margin-left: 5px" type="primary" icon="el-icon-refresh-right" @click="reSet" title="重置"></el-button>
+      <el-button style="margin-left: 5px" type="primary" icon="el-icon-refresh-right" @click="reSet"
+                 title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
 
       <span style="margin-left:432px">操作：</span>
@@ -44,7 +45,7 @@
 
     <el-table v-loading="list_loading"
               height=550
-              stripe=true
+              :stripe="true"
               style="font-size: 15px"
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
@@ -57,7 +58,17 @@
       <el-table-column prop="operation" label="操作" width="130" fixed="right">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" @click="mod(scope.row)" title="编辑"></el-button>
-          <el-button type="danger" icon="el-icon-delete"  @click="del(scope.row.id,scope.row.name)" title="删除"></el-button>
+          <el-popconfirm
+              confirm-button-text='删除'
+              cancel-button-text='取消'
+              icon="el-icon-info"
+              icon-color="red"
+              title="确认删除该数据吗？"
+              @confirm="del(scope.row.id,scope.row.name)"
+              style="margin-left: 8px"
+          >
+            <el-button type="danger" icon="el-icon-delete" slot="reference" title="删除"></el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
       <template slot="empty">
@@ -83,11 +94,11 @@
         :before-close="closeDialog"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-<!--        <el-form-item label="id" prop="id">-->
-<!--          <el-col :span="15">-->
-<!--            <el-input v-model="form.id"></el-input>-->
-<!--          </el-col>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="id" prop="id">-->
+        <!--          <el-col :span="15">-->
+        <!--            <el-input v-model="form.id"></el-input>-->
+        <!--          </el-col>-->
+        <!--        </el-form-item>-->
         <el-form-item label="物品类型" prop="name">
           <el-col :span="15">
             <el-input v-model="form.name"></el-input>
@@ -155,7 +166,7 @@ export default {
 
       centerDialogVisible: false,
       form: {
-        id:'',
+        id: '',
         name: '',
         remark: ''
       },
@@ -180,7 +191,7 @@ export default {
       this.exportStep = handleExportNum(this.total, this.exportStep)
 
     },
-    handleClose(){    //关闭窗口后清除value
+    handleClose() {    //关闭窗口后清除value
       this.value = 0;
       this.dialogVisible = false
     },
@@ -333,26 +344,16 @@ export default {
     },
     //删除
     del(id, name) {
-      console.log(id)
-      this.$confirm('是否删除当前用户信息？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        closeOnClickModal: false
-      }).then(() => {
-        //  接口 点击确定就会走then
-        this.$axios.get(this.$httpUrl + '/goodstype/delete?id=' + id)
-        this.$message({
-          message: '删除物品类型[' + name + ']成功~~~~~~~~~~~~~~~~~',
-          type: 'success'
-        })
-        console.log('dedede', name)
-        this.loadPost()
 
-      }).catch(e => {
-        // 取消就会走catch
-        console.log(e)
+      //  接口 点击确定就会走then
+      this.$axios.get(this.$httpUrl + '/goodstype/delete?id=' + id)
+      this.$message({
+        message: '删除物品类型[' + name + ']成功~~~~~~~~~~~~~~~~~',
+        type: 'success'
       })
+      console.log('dedede', name)
+      this.loadPost()
+
     },
     save() {
       //输入格式正确则保存
@@ -403,7 +404,7 @@ export default {
       this.form.id = '';  //清空id
       this.form.name = '';   //清空name
       this.form.remark = '';  //清空remark
-      console.log('id',this.form.id)
+      console.log('id', this.form.id)
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

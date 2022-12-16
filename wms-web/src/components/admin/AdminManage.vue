@@ -24,7 +24,8 @@
             :value="item.value">
         </el-option>
       </el-select>
-      <el-button type="primary" style="margin-left: 5px" icon="el-icon-refresh-right" @click="reSet" title="重置"></el-button>
+      <el-button type="primary" style="margin-left: 5px" icon="el-icon-refresh-right" @click="reSet"
+                 title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
 
       <span style="margin-left:432px">操作：</span>
@@ -36,7 +37,7 @@
           :close-on-click-modal="false"
           :visible.sync="dialogVisible"
           width="40%">
-        <span>共{{this.total}}条数据</span>
+        <span>共{{ this.total }}条数据</span>
         <div class="block">
           <el-slider
               input-size="mini"
@@ -47,7 +48,7 @@
               show-stops
           >
           </el-slider>
-          <el-checkbox v-model="checked" >选择全部结果（{{this.total}}）条</el-checkbox>
+          <el-checkbox v-model="checked">选择全部结果（{{ this.total }}）条</el-checkbox>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="handleClose">取 消</el-button>
@@ -58,7 +59,7 @@
 
     <el-table v-loading="list_loading"
               id="adminable"
-              stripe=true
+              :stripe="true"
               height=550
               style="font-size: 15px"
               :data="tableData"
@@ -90,7 +91,17 @@
       <el-table-column prop="operation" label="操作" width="130" fixed="right">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" @click="mod(scope.row)" title="编辑"></el-button>
-          <el-button type="danger" icon="el-icon-delete"  @click="del(scope.row.id,scope.row.name)" title="删除"></el-button>
+          <el-popconfirm
+              confirm-button-text='删除'
+              cancel-button-text='取消'
+              icon="el-icon-info"
+              icon-color="red"
+              title="确认删除该数据吗？"
+              @confirm="del(scope.row.id,scope.row.name)"
+              style="margin-left: 8px"
+          >
+            <el-button type="danger" icon="el-icon-delete" slot="reference" title="删除"></el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
       <template slot="empty">
@@ -230,7 +241,7 @@ export default {
       name: '',
       sex: '',
       role: '',
-      no:'',
+      no: '',
 
       //下拉框
       sexs: [
@@ -307,19 +318,19 @@ export default {
       this.dialogVisible = true
       this.exportStep = handleExportNum(this.total, this.exportStep)
 
-      console.log(this.exportStep,'stepppppp')
+      console.log(this.exportStep, 'stepppppp')
 
     },
-    handleClose(){    //关闭窗口后清除value
+    handleClose() {    //关闭窗口后清除value
       this.value = 0;
       this.dialogVisible = false
     },
 
     exportData() {
       let exportNum = 0
-      if (this.checked){
+      if (this.checked) {
         exportNum = this.total
-      }else {
+      } else {
         exportNum = this.value
       }
       this.dialogVisible = false
@@ -425,7 +436,7 @@ export default {
       this.$axios.post(this.$httpUrl + '/user/listPage1', {
         param: {
           name: this.name,
-          no:this.no,
+          no: this.no,
           sex: this.sex,
           roleId: 1
         },
@@ -491,26 +502,27 @@ export default {
     },
     //删除
     del(id, name) {
-      console.log(id)
-      this.$confirm('是否删除当前用户信息？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        closeOnClickModal: false
-      }).then(() => {
-        //  接口 点击确定就会走then
-        this.$axios.get(this.$httpUrl + '/user/delete?id=' + id)
-        this.$message({
-          message: '删除用户[' + name + ']成功~~~~~~~~~~~~~~~~~',
-          type: 'success'
-        })
-        console.log('dedede', name)
-        this.loadPost()
-
-      }).catch(e => {
-        // 取消就会走catch
-        console.log(e)
+      // console.log(id)
+      // this.$confirm('是否删除当前用户信息？', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning',
+      //   closeOnClickModal: false
+      // }).then(() => {
+      //   //  接口 点击确定就会走then
+      console.log('del:', name)
+      this.$axios.get(this.$httpUrl + '/user/delete?id=' + id)
+      this.$message({
+        message: '删除用户[' + name + ']成功~~~~~~~~~~~~~~~~~',
+        type: 'success'
       })
+      console.log('dedede', name)
+      this.loadPost()
+
+      // }).catch(e => {
+      //   // 取消就会走catch
+      //   console.log(e)
+      // })
     },
     save() {
       //输入格式正确则保存
