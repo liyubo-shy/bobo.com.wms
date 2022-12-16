@@ -485,6 +485,7 @@ export default {
       this.name = '';
       this.sex = '';
       this.no='';
+      this.loadPost()
     },
 
     //新增
