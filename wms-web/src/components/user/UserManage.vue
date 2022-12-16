@@ -484,6 +484,7 @@ export default {
     reSet() {
       this.name = '';
       this.sex = '';
+      this.no='';
       this.loadPost()
     },
 
