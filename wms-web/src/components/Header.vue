@@ -9,7 +9,7 @@
     </div>
 
     <el-dropdown style="color: white" trigger="click">
-      <span class="el-dropdown-link" style="cursor: pointer">
+      <span class="el-dropdown-link " style="cursor: pointer">
         {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <i class="el-icon-user-solid" style="margin-left: 2px;font-size: 18px"></i>

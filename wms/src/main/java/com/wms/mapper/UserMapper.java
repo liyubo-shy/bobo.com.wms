@@ -16,5 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
     IPage<User> pageC (IPage<User> page);
+    void removeByNo();
+
 
 }

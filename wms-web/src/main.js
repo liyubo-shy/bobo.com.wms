@@ -8,7 +8,7 @@ import VueRouter from "vue-router";
 import router from "@/router";
 import store from './store';
 import echarts from 'echarts'
-// Vue.prototype.$httpUrl="http://10.205.103.134:8090"
+// Vue.prototype.$httpUrl="http://192.168.3.161:8090"
 Vue.prototype.$httpUrl="http://localhost:8090"
 Vue.prototype.$axios =axios;
 Vue.prototype.$echarts = echarts;

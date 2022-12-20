@@ -10,9 +10,12 @@ import com.wms.entity.Menu;
 import com.wms.entity.User;
 import com.wms.service.impl.MenuServiceImpl;
 import com.wms.service.impl.UserServiceImpl;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -140,7 +143,13 @@ public class UserController {
         IPage<User> result = userService.page(page, userLambdaQueryWrapper);
         return Result.scu(result.getRecords(), result.getTotal());
 
+    }
 
-
+    //批量删除by no
+    @PostMapping("/deleteByNoMul")
+    public void deleteByNoMul(@RequestBody Integer[] ids) {
+        for (Integer id : ids){
+            userService.removeById(id);
+        }
     }
 }

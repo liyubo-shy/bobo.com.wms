@@ -29,10 +29,17 @@
       <el-button style="margin-left: 5px" type="primary" icon="el-icon-refresh-right" @click="reSet"
                  title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
-
-      <span style="margin-left:432px">操作：</span>
+      <span style="margin-left:360px">操作：</span>
       <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
+      <el-button size="small"
+                 @click="handleDelete()"
+                 class="btnItem"
+                 style="margin-left:10px;"
+                 icon="el-icon-delete"
+                 :disabled="multiple"
+      >
+      </el-button>
       <el-dialog
           :before-close="handleClose"
           title="请选择导出条数"
@@ -64,12 +71,15 @@
     <el-table v-loading="list_loading"
               height=550
               :stripe="true"
+              @selection-change="handleSelectionChange"
               id="userTable"
               style="font-size: 15px"
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
-      <el-table-column prop="id" label="id" sortable width="100"></el-table-column>
+      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="index" label="序号" width="60"></el-table-column>
+      <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column prop="no" label="账号" sortable width="130"></el-table-column>
       <el-table-column prop="name" label="姓名" sortable width="130"></el-table-column>
       <el-table-column prop="sex" label="性别" sortable width="80">
@@ -283,6 +293,12 @@ export default {
         sex: '',
         roleId: 2
       },
+
+      //多选
+      ids: [],    // 选中数组
+      single: true,   // 非单个禁用
+      multiple: true,   // 非多个禁用
+
       //表单输入规则
       rules: {
         name: [
@@ -484,7 +500,7 @@ export default {
     reSet() {
       this.name = '';
       this.sex = '';
-      this.no='';
+      this.no = '';
       this.loadPost()
     },
 
@@ -593,8 +609,46 @@ export default {
       console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.loadPost()
-    }
-  },
+    },
+
+    //多选
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.id);
+      console.log('selection:::::::::',selection.map(item => item.id))
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+      console.log('dddd', this.ids)
+
+    },
+    handleDelete() {
+      this.$confirm("是否确认删除选中的数据项?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+          .then(() => {
+                this.deleteMultiple();
+              }
+          )
+          .then(() => {
+            this.loadPost()
+          })
+          .catch(() => {
+          });
+
+    },
+    deleteMultiple() {
+      console.log(this.ids)
+      this.$axios.post(this.$httpUrl + '/user/deleteByNoMul',this.ids)
+      this.$message({
+        message: '批量删除用户成功~~~~~~~~~~~~~~~~~',
+        type: 'success'
+      })
+    },
+
+
+  }
+
 
 }
 

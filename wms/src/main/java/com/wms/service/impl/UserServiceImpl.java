@@ -7,6 +7,7 @@ import com.wms.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -19,6 +20,8 @@ import javax.annotation.Resource;
  * @since 2022-11-03
  */
 @Service
+@Transactional
+
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
 
@@ -27,5 +30,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public IPage<User> pageC(IPage<User> page) {
         return null;
+    }
+
+
+    @Override
+    @Transactional
+    public void removeByNo(Integer[] id) {
     }
 }
