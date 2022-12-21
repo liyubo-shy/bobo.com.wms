@@ -238,9 +238,10 @@ export default {
           const columnsData = []
           columns.forEach((row) => {
             const sums = {
-              id: row.id,
               name: row.name,
-              remark: row.remark
+              remark: row.remark,
+              createDate: row.createDate,
+              updateDate: row.updateDate
             }
             columnsData.push(sums)
           })
@@ -253,15 +254,17 @@ export default {
     handleDownload(tableData) {
       import('@/options/ExportExcel').then((excel) => {
         const tHeader = [
-          'id',
           '物品类型',
-          '备注'
+          '备注',
+          '创建时间',
+          '更新时间'
         ]
 
         const filterVal = [
-          'id',
           'name',
-          'remark'
+          'remark',
+          'createDate',
+          'updateDate'
         ]
         const data = this.formatJson(filterVal, tableData)
         const date = new Date()

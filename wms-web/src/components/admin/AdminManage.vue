@@ -192,7 +192,6 @@
 <script>
 
 
-
 import {handleExportNum} from "@/options/ExportExcel";
 
 export default {
@@ -352,6 +351,7 @@ export default {
         param: {
           name: this.name,
           sex: this.sex,
+          no: this.no,
           roleId: 1
         },
         pageNum: this.pageNum,
@@ -361,15 +361,17 @@ export default {
         if (res.data.code === 200) {
           const columns = res.data.data
           const columnsData = []
+          console.log('data.data::::::::::', res.data.data)
           columns.forEach((row) => {
             const sums = {
-              id: row.id,
               no: row.no,
               name: row.name,
               sex: row.sex === 0 ? '女' : '男',
               age: row.age,
               phone: row.phone,
-              role: row.roleId === 0 ? '超级管理员' : row.roleId === 1 ? '管理员' : '用户'
+              role: row.roleId === 0 ? '超级管理员' : row.roleId === 1 ? '管理员' : '用户',
+              createDate: row.createDate,
+              updateDate: row.updateDate
             }
             columnsData.push(sums)
           })
@@ -382,23 +384,25 @@ export default {
     handleDownload(tableData) {
       import('@/options/ExportExcel').then((excel) => {
         const tHeader = [
-          'id',
           '账号',
           '姓名',
           '性别',
           '年龄',
           '手机号码',
-          '角色'
+          '角色',
+          '创建时间',
+          '更新时间'
         ]
 
         const filterVal = [
-          'id',
           'no',
           'name',
           'sex',
           'age',
           'phone',
-          'role'
+          'role',
+          'createDate',
+          'updateDate'
         ]
         const data = this.formatJson(filterVal, tableData)
         const date = new Date()
@@ -591,7 +595,7 @@ export default {
     //多选
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id);
-      console.log('多选id:',selection.map(item => item.id))
+      console.log('多选id:', selection.map(item => item.id))
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
 

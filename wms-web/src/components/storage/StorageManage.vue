@@ -203,11 +203,9 @@ export default {
       }
       this.dialogVisible = false
       this.$message.warning('正在导出数据,请稍等~')
-      this.$axios.post(this.$httpUrl + '/user/listPage1', {
+      this.$axios.post(this.$httpUrl + '/storage/listPage1', {
         param: {
           name: this.name,
-          sex: this.sex,
-          roleId: 2
         },
         pageNum: this.pageNum,
         pageSize: exportNum
@@ -218,13 +216,10 @@ export default {
           const columnsData = []
           columns.forEach((row) => {
             const sums = {
-              id: row.id,
-              no: row.no,
               name: row.name,
-              sex: row.sex === 0 ? '女' : '男',
-              age: row.age,
-              phone: row.phone,
-              role: row.roleId === 0 ? '超级管理员' : row.roleId === 1 ? '管理员' : '用户'
+              remark: row.remark,
+              createDate: row.createDate,
+              updateDate: row.updateDate
             }
             columnsData.push(sums)
           })
@@ -237,15 +232,17 @@ export default {
     handleDownload(tableData) {
       import('@/options/ExportExcel').then((excel) => {
         const tHeader = [
-          'id',
           '仓库名',
-          '备注'
+          '备注',
+          '创建时间',
+          '更新时间'
         ]
 
         const filterVal = [
-          'id',
           'name',
-          'remark'
+          'remark',
+          'createDate',
+          'updateDate'
         ]
         const data = this.formatJson(filterVal, tableData)
         const date = new Date()

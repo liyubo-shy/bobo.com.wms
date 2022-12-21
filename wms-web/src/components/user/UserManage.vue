@@ -358,7 +358,8 @@ export default {
         param: {
           name: this.name,
           sex: this.sex,
-          roleId: 2
+          roleId: 2,
+          no:this.no
         },
         pageNum: this.pageNum,
         pageSize: exportNum
@@ -369,13 +370,14 @@ export default {
           const columnsData = []
           columns.forEach((row) => {
             const sums = {
-              id: row.id,
               no: row.no,
               name: row.name,
               sex: row.sex === 0 ? '女' : '男',
               age: row.age,
               phone: row.phone,
-              role: row.roleId === 0 ? '超级管理员' : row.roleId === 1 ? '管理员' : '用户'
+              role: row.roleId === 0 ? '超级管理员' : row.roleId === 1 ? '管理员' : '用户',
+              createDate: row.createDate,
+              updateDate: row.updateDate
             }
             columnsData.push(sums)
           })
@@ -388,23 +390,25 @@ export default {
     handleDownload(tableData) {
       import('@/options/ExportExcel').then((excel) => {
         const tHeader = [
-          'id',
           '账号',
           '姓名',
           '性别',
           '年龄',
           '手机号码',
-          '角色'
+          '角色',
+          '创建时间',
+          '更新时间'
         ]
 
         const filterVal = [
-          'id',
           'no',
           'name',
           'sex',
           'age',
           'phone',
-          'role'
+          'role',
+          'createDate',
+          'updateDate'
         ]
         const data = this.formatJson(filterVal, tableData)
         const date = new Date()
