@@ -15,6 +15,15 @@
       <span style="margin-left:432px">操作：</span>
       <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
+      <el-button size="small"
+                 type="danger"
+                 @click="handleDelete()"
+                 class="btnItem"
+                 style="margin-left:10px;"
+                 icon="el-icon-delete"
+                 :disabled="multiple"
+      >批量删除
+      </el-button>
       <el-dialog
           :before-close="handleClose"
           title="请选择导出条数"
@@ -45,11 +54,13 @@
     <el-table v-loading="list_loading"
               height=550
               :stripe="true"
-
+              @selection-change="handleSelectionChange"
               style="font-size: 15px"
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
+      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="index" label="序号" width="60"></el-table-column>
       <el-table-column prop="id" label="id" sortable width="100"></el-table-column>
       <el-table-column prop="name" label="物品名" sortable width="130"></el-table-column>
       <el-table-column prop="storage" label="物品类型" sortable width="130"></el-table-column>
@@ -172,6 +183,12 @@ export default {
         name: '',
         remark: ''
       },
+
+      //多选
+      ids: [],    // 选中数组
+      single: true,   // 非单个禁用
+      multiple: true,   // 非多个禁用
+
       //表单输入规则
       rules: {
         name: [
@@ -417,7 +434,40 @@ export default {
       console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.loadPost()
-    }
+    },
+
+    //多选
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.id);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+
+    },
+    handleDelete() {
+      this.$confirm("是否确认删除选中的数据项?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+          .then(() => {
+                this.deleteMultiple();
+              }
+          )
+          .then(() => {
+            this.loadPost()
+          })
+          .catch(() => {
+          });
+
+    },
+    deleteMultiple() {
+      console.log(this.ids)
+      this.$axios.post(this.$httpUrl + '/goods/deleteByNoMul', this.ids)
+      this.$message.success('批量删除成功!')
+      //等待500ms后台删除完再刷新页面
+      setTimeout(()=>this.loadPost(),500)
+
+    },
   },
 
 }

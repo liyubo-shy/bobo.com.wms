@@ -5,7 +5,6 @@ import com.wms.entity.User;
 import com.wms.mapper.UserMapper;
 import com.wms.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     @Override
-    @Transactional
     public void removeByNo(Integer[] id) {
+    }
+
+    @Override
+    public Boolean myUpdate(Integer id,String name,Integer age,String phone,Integer sex) {
+        return true;
     }
 }

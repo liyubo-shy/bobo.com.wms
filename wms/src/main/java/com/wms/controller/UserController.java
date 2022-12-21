@@ -2,6 +2,7 @@ package com.wms.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.QueryPageParam;
@@ -10,6 +11,7 @@ import com.wms.entity.Menu;
 import com.wms.entity.User;
 import com.wms.service.impl.MenuServiceImpl;
 import com.wms.service.impl.UserServiceImpl;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -79,8 +81,16 @@ public class UserController {
 
     //修改
     @PostMapping("/update")
-    public boolean update(@RequestBody User user) {
-        return userService.updateById(user);
+    public Boolean update(@RequestBody User user) {
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",user.getId());
+        updateWrapper.set("name",user.getName());
+        updateWrapper.set("age",user.getAge());
+        updateWrapper.set("phone",user.getPhone());
+        updateWrapper.set("sex",user.getSex());
+        userService.update(new User(),updateWrapper);
+        return true;
+
     }
 
     //修改或新增

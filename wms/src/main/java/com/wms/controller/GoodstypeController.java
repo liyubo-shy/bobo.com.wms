@@ -77,4 +77,12 @@ public class GoodstypeController {
         List<Goodstype> list = goodstypeService.lambdaQuery().eq(Goodstype::getName, name).list();
         return list.size() > 0 ? Result.scu(list) : Result.fail();
     }
+
+    //批量删除by no
+    @PostMapping("/deleteByNoMul")
+    public void deleteByNoMul(@RequestBody Integer[] ids) {
+        for (Integer id : ids){
+            goodstypeService.removeById(id);
+        }
+    }
 }

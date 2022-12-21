@@ -16,4 +16,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface IUserService extends IService<User> {
     IPage<User> pageC (IPage<User> page);
     void removeByNo (Integer[] no);
+    Boolean myUpdate (Integer id,String name,Integer age,String phone,Integer sex);
 }

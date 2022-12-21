@@ -29,16 +29,17 @@
       <el-button style="margin-left: 5px" type="primary" icon="el-icon-refresh-right" @click="reSet"
                  title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
-      <span style="margin-left:360px">操作：</span>
+      <span style="margin-left:340px">操作：</span>
       <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
       <el-button size="small"
+                 type="danger"
                  @click="handleDelete()"
                  class="btnItem"
                  style="margin-left:10px;"
                  icon="el-icon-delete"
                  :disabled="multiple"
-      >
+      >批量删除
       </el-button>
       <el-dialog
           :before-close="handleClose"
@@ -79,7 +80,7 @@
               border>
       <el-table-column type="selection"></el-table-column>
       <el-table-column type="index" label="序号" width="60"></el-table-column>
-      <el-table-column prop="id" label="id" width="60"></el-table-column>
+      <el-table-column v-if="false" prop="id" label="id" width="60"></el-table-column>
       <el-table-column prop="no" label="账号" sortable width="130"></el-table-column>
       <el-table-column prop="name" label="姓名" sortable width="130"></el-table-column>
       <el-table-column prop="sex" label="性别" sortable width="80">
@@ -204,15 +205,6 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'UserManage',
   data() {
-    //校验年龄
-    // let checkAge = (rule, value, callback) => {
-    //   if (value > 150) {
-    //     callback(new Error('年龄输⼊过⼤'));
-    //   } else {
-    //     callback();
-    //   }
-    // };
-
 
     //校验账号是否已存在
     let checkDuplicate = (rule, value, callback) => {
@@ -520,7 +512,6 @@ export default {
       this.form.id = row.id;
       this.form.no = row.no;
       this.form.name = row.name;
-      this.form.password = '';
       this.form.age = row.age;
       this.form.phone = row.phone;
       this.form.sex = row.sex;
@@ -547,33 +538,24 @@ export default {
       //输入格式正确则保存
       this.$refs.form.validate((valid) => {
         if (valid) {
-          console.log(this.form)
           //开始保存
-          this.$axios.post(this.$httpUrl + '/user/save', this.form).then(res => res.data).then(res => {
-            console.log(res.data)
-            if (res.code === 200) {   //判断状态码是否200
-              if (this.is_add) {
-                this.$message({
-                  message: '新增用户成功~~~',
-                  type: 'success'
-                })
-              } else {
-                this.$message({
-                  message: '修改用户信息成功~~~',
-                  type: 'success'
-                })
-              }
+          if (this.is_add) {
+            this.$axios.post(this.$httpUrl + '/user/save', this.form)
+            this.$message({
+              message: '新增用户成功~~~',
+              type: 'success'
+            })
+          } else {
+            this.$axios.post(this.$httpUrl + '/user/update', this.form)
+            this.$message({
+              message: '修改用户成功~~~',
+              type: 'success'
+            })
+          }
 
-              this.loadPost();
-              this.centerDialogVisible = false
-            } else {
-              //状态码不为200，保存失败
-              this.$message({
-                message: '新增用户失败！！！',
-                type: 'error'
-              });
-            }
-          })
+          this.loadPost();
+          this.centerDialogVisible = false
+
         } else {
           this.$message({
             message: "请规范填写信息",
@@ -582,8 +564,6 @@ export default {
           return false;
         }
       });
-
-
     },
     closeDialog() {
       this.centerDialogVisible = false
@@ -614,10 +594,8 @@ export default {
     //多选
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id);
-      console.log('selection:::::::::',selection.map(item => item.id))
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
-      console.log('dddd', this.ids)
 
     },
     handleDelete() {
@@ -639,13 +617,12 @@ export default {
     },
     deleteMultiple() {
       console.log(this.ids)
-      this.$axios.post(this.$httpUrl + '/user/deleteByNoMul',this.ids)
-      this.$message({
-        message: '批量删除用户成功~~~~~~~~~~~~~~~~~',
-        type: 'success'
-      })
-    },
+      this.$axios.post(this.$httpUrl + '/user/deleteByNoMul', this.ids)
+      this.$message.success('批量删除成功!')
+      //等待500ms后台删除完再刷新页面
+      setTimeout(()=>this.loadPost(),500)
 
+    },
 
   }
 

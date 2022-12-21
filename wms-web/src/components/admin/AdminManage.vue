@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin-bottom: 5px">
-      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">姓大名：</span>
+      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">姓名：</span>
       <el-input placeholder="请输入名字"
                 v-model="name"
                 suffix-icon="el-icon-search"
@@ -28,9 +28,18 @@
                  title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
 
-      <span style="margin-left:432px">操作：</span>
+      <span style="margin-left:340px">操作：</span>
       <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
+      <el-button size="small"
+                 type="danger"
+                 @click="handleDelete()"
+                 class="btnItem"
+                 style="margin-left:10px;"
+                 icon="el-icon-delete"
+                 :disabled="multiple"
+      >批量删除
+      </el-button>
       <el-dialog
           :before-close="handleClose"
           title="请选择导出条数"
@@ -60,19 +69,22 @@
     <el-table v-loading="list_loading"
               id="adminable"
               :stripe="true"
+              @selection-change="handleSelectionChange"
               height=550
               style="font-size: 15px"
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
-      <el-table-column prop="id" label="id" sortable width="100"></el-table-column>
+      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="index" label="序号" width="60"></el-table-column>
+      <el-table-column v-if="false" prop="id" label="id" sortable width="100"></el-table-column>
       <el-table-column prop="no" label="账号" sortable width="130"></el-table-column>
       <el-table-column prop="name" label="姓名" sortable width="130"></el-table-column>
       <el-table-column prop="sex" label="性别" sortable width="80">
         <template slot-scope="scope">
           <el-tag
-              :type="scope.row.sex === 1 ? 'primary' : 'danger'"
-              disable-transitions>{{ scope.row.sex === 1 ? '男' : '女' }}
+              :type="scope.row.sex === 1 ? 'primary' : (scope.row.sex ===0 ? 'danger' : 'success')"
+              disable-transitions>{{ scope.row.sex === 1 ? '男' : (scope.row.sex === 0 ? '女' : '鲲') }}
           </el-tag>
         </template>
       </el-table-column>
@@ -180,13 +192,8 @@
 <script>
 
 
-// import axios from "axios";axios
 
-// eslint-disable-next-line no-unused-vars
-import {exportExcel} from "../../../public/excelConfig";
 import {handleExportNum} from "@/options/ExportExcel";
-// import FileSaver from 'file-saver';
-// import * as XLSX from 'xlsx'
 
 export default {
 
@@ -271,6 +278,12 @@ export default {
         sex: '',
         roleId: '1'
       },
+
+      //多选
+      ids: [],    // 选中数组
+      single: true,   // 非单个禁用
+      multiple: true,   // 非多个禁用
+
       //表单输入规则
       rules: {
         name: [
@@ -471,7 +484,7 @@ export default {
     reSet() {
       this.name = '';
       this.sex = '';
-      this.no='';
+      this.no = '';
       this.loadPost()
     },
 
@@ -503,14 +516,7 @@ export default {
     },
     //删除
     del(id, name) {
-      // console.log(id)
-      // this.$confirm('是否删除当前用户信息？', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning',
-      //   closeOnClickModal: false
-      // }).then(() => {
-      //   //  接口 点击确定就会走then
+
       console.log('del:', name)
       this.$axios.get(this.$httpUrl + '/user/delete?id=' + id)
       this.$message({
@@ -520,42 +526,30 @@ export default {
       console.log('dedede', name)
       this.loadPost()
 
-      // }).catch(e => {
-      //   // 取消就会走catch
-      //   console.log(e)
-      // })
+
     },
     save() {
       //输入格式正确则保存
       this.$refs.form.validate((valid) => {
         if (valid) {
-          console.log(this.form)
           //开始保存
-          this.$axios.post(this.$httpUrl + '/user/save', this.form).then(res => res.data).then(res => {
-            console.log(res.data)
-            if (res.code === 200) {   //判断状态码是否200
-              if (this.is_add) {
-                this.$message({
-                  message: '新增用户成功~~~',
-                  type: 'success'
-                })
-              } else {
-                this.$message({
-                  message: '修改用户信息成功~~~',
-                  type: 'success'
-                })
-              }
+          if (this.is_add) {
+            this.$axios.post(this.$httpUrl + '/user/save', this.form)
+            this.$message({
+              message: '新增用户成功~~~',
+              type: 'success'
+            })
+          } else {
+            this.$axios.post(this.$httpUrl + '/user/update', this.form)
+            this.$message({
+              message: '修改用户成功~~~',
+              type: 'success'
+            })
+          }
 
-              this.loadPost();
-              this.centerDialogVisible = false
-            } else {
-              //状态码不为200，保存失败
-              this.$message({
-                message: '新增用户失败！！！',
-                type: 'error'
-              });
-            }
-          })
+          this.loadPost();
+          this.centerDialogVisible = false
+
         } else {
           this.$message({
             message: "请规范填写信息",
@@ -564,13 +558,12 @@ export default {
           return false;
         }
       });
-
-
     },
     closeDialog() {
       this.centerDialogVisible = false
       this.$refs.form.clearValidate()
-    },
+    }
+    ,
     resetForm() {
       this.form.id = '';
       this.form.roleId = 1;
@@ -580,18 +573,54 @@ export default {
       this.form.age = '';
       this.form.phone = '';
       this.form.no = '';
-    },
+    }
+    ,
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.pageNum = 1;
       this.loadPost()
-    },
+    }
+    ,
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.loadPost()
-    }
+    },
+
+    //多选
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.id);
+      console.log('多选id:',selection.map(item => item.id))
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+
+    },
+    handleDelete() {
+      this.$confirm("是否确认删除选中的数据项?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+          .then(() => {
+                this.deleteMultiple();
+              }
+          )
+          .then(() => {
+            this.loadPost()
+          })
+          .catch(() => {
+          });
+
+    },
+    deleteMultiple() {
+      console.log(this.ids)
+      this.$axios.post(this.$httpUrl + '/user/deleteByNoMul', this.ids)
+      this.$message.success('批量删除成功!')
+      //等待500ms后台删除完再刷新页面
+      setTimeout(() => this.loadPost(), 500)
+
+    },
   },
 
 }
