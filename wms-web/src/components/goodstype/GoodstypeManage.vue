@@ -121,7 +121,7 @@
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-col :span="15">
-            <el-input v-model="form.remark"></el-input>
+            <el-input type="textarea" v-model="form.remark"></el-input>
           </el-col>
         </el-form-item>
 
