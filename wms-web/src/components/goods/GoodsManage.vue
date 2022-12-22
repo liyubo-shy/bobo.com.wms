@@ -82,9 +82,9 @@
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
       <el-table-column type="selection"></el-table-column>
-      <el-table-column type="index" label="序号" width="60"></el-table-column>
+      <el-table-column fixed="left" type="index" label="序号" width="60"></el-table-column>
       <el-table-column prop="id" label="id" v-if="false" sortable width="100"></el-table-column>
-      <el-table-column prop="name" label="物品名" sortable width="130"></el-table-column>
+      <el-table-column fixed="left" prop="name" label="物品名" sortable width="130"></el-table-column>
       <el-table-column prop="goodstype" label="物品类型" :formatter="formatGoodsType" sortable
                        width="130"></el-table-column>
       <el-table-column prop="storage" label="仓库" :formatter="formatStorage" sortable width="280"></el-table-column>
