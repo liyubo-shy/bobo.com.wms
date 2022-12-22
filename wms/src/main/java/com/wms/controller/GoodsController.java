@@ -66,10 +66,18 @@ public class GoodsController {
         //每页数量
         page.setSize(query.getPageSize());
         //模糊查询by name
-        LambdaQueryWrapper<Goods> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.like(Goods::getName, param.get("name").toString());
+        LambdaQueryWrapper<Goods> goodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        goodsLambdaQueryWrapper.like(Goods::getName, param.get("name").toString());
+        //storage不为空则精确查询仓库
+        if (!param.get("storage").toString().equals("")) {
+            goodsLambdaQueryWrapper.eq(Goods::getStorage, param.get("storage").toString());
+        }
+        //goodstype不为空则精确查询类型
+        if (!param.get("goodstype").toString().equals("")){
+            goodsLambdaQueryWrapper.eq(Goods::getGoodstype, param.get("goodstype").toString());
+        }
 
-        IPage<Goods> result = goodsService.page(page, userLambdaQueryWrapper);
+        IPage<Goods> result = goodsService.page(page, goodsLambdaQueryWrapper);
         return Result.scu(result.getRecords(), result.getTotal());
 
     }

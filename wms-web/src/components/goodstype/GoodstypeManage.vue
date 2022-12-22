@@ -54,16 +54,18 @@
     </div>
 
     <el-table v-loading="list_loading"
+              :row-style="{height: '40px'}"
+              :cell-style="{padding: '3px'}"
               height=550
               :stripe="true"
               @selection-change="handleSelectionChange"
-              style="font-size: 15px"
+              style="font-size: 14px"
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
       <el-table-column type="selection"></el-table-column>
       <el-table-column type="index" label="序号" width="60"></el-table-column>
-      <el-table-column prop="id" label="id" sortable width="100"></el-table-column>
+      <el-table-column prop="id" label="id" v-if="false" sortable width="100"></el-table-column>
       <el-table-column prop="name" label="物品类型" sortable width="200"></el-table-column>
       <el-table-column prop="remark" label="备注" sortable width="400"></el-table-column>
       <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>

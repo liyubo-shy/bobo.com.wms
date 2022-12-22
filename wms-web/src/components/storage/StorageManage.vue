@@ -53,10 +53,12 @@
     </div>
 
     <el-table v-loading="list_loading"
+              :row-style="{height: '40px'}"
+              :cell-style="{padding: '3px'}"
               height=550
               :stripe="true"
               @selection-change="handleSelectionChange"
-              style="font-size: 15px"
+              style="font-size: 14px"
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
@@ -147,7 +149,7 @@ export default {
       list_loading: false,
       tableData: [],
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 20,
       total: 0,
       name: '',
 

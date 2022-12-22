@@ -14,6 +14,7 @@
     "element-ui": "^2.15.10",
     "file-saver": "^2.0.5",
     "sheetjs-style": "^0.15.8",
+    "v-fit-columns": "^0.2.0",
     "vue": "^2.6.14",
     "vue-router": "^3.5.4",
     "vuex": "^3.6.2",

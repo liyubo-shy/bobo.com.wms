@@ -67,11 +67,13 @@
     </div>
 
     <el-table v-loading="list_loading"
+              :row-style="{height: '40px'}"
+              :cell-style="{padding: '3px'}"
               id="adminable"
               :stripe="true"
               @selection-change="handleSelectionChange"
               height=550
-              style="font-size: 15px"
+              style="font-size: 14px"
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
@@ -242,7 +244,7 @@ export default {
       list_loading: false,
       tableData: [],
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 20,
       total: 0,
       name: '',
       sex: '',
@@ -305,6 +307,8 @@ export default {
         ],
         age: [
           {required: true, message: '请输⼊年龄', trigger: 'blur'},
+          {pattern: /^[1-9]\d*$/, message: "请输⼊正确年龄", trigger: "blur"}
+
           // {min: 0, max: 150, message: '年龄必须在 1-150 之间', trigger: 'blur'},
           // {pattern: /^([1-9][0-9]*){1,3}$/, message: '年龄必须为正整数字', trigger: "blur"},
           // {validator: checkAge, trigger: 'blur'}
@@ -521,13 +525,11 @@ export default {
     //删除
     del(id, name) {
 
-      console.log('del:', name)
       this.$axios.get(this.$httpUrl + '/user/delete?id=' + id)
       this.$message({
         message: '删除用户[' + name + ']成功~~~~~~~~~~~~~~~~~',
         type: 'success'
       })
-      console.log('dedede', name)
       this.loadPost()
 
 
