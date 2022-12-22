@@ -149,7 +149,7 @@ public class UserController {
         userLambdaQueryWrapper.like(User::getRoleId, param.get("roleId").toString());
         //模糊查询by no
         userLambdaQueryWrapper.like(User::getNo, param.get("no").toString());
-
+        userLambdaQueryWrapper.orderByDesc(true,User::getCreateDate);
         IPage<User> result = userService.page(page, userLambdaQueryWrapper);
         return Result.scu(result.getRecords(), result.getTotal());
 

@@ -132,7 +132,7 @@
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="仓库" prop="storage">
-          <el-select v-model="form.storage" placeholder="请选择仓库">
+          <el-select clearable v-model="form.storage" placeholder="请选择仓库">
             <el-option
                 v-for="item in storageData"
                 :key="item.id"
@@ -142,7 +142,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="分类" prop="goodstype">
-          <el-select v-model="form.goodstype" placeholder="请选择分类">
+          <el-select clearable v-model="form.goodstype" placeholder="请选择分类">
             <el-option
                 v-for="item in goodsTypeData"
                 :key="item.id"

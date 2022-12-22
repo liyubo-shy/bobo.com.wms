@@ -3,6 +3,7 @@ package com.wms.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
@@ -76,7 +77,7 @@ public class GoodsController {
         if (!param.get("goodstype").toString().equals("")){
             goodsLambdaQueryWrapper.eq(Goods::getGoodstype, param.get("goodstype").toString());
         }
-
+        goodsLambdaQueryWrapper.orderByDesc(true,Goods :: getCreateDate);
         IPage<Goods> result = goodsService.page(page, goodsLambdaQueryWrapper);
         return Result.scu(result.getRecords(), result.getTotal());
 

@@ -64,10 +64,10 @@ public class StorageController {
         //每页数量
         page.setSize(query.getPageSize());
         //模糊查询by name
-        LambdaQueryWrapper<Storage> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.like(Storage::getName, param.get("name").toString());
-
-        IPage<Storage> result = storageService.page(page, userLambdaQueryWrapper);
+        LambdaQueryWrapper<Storage> storageLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        storageLambdaQueryWrapper.like(Storage::getName, param.get("name").toString());
+        storageLambdaQueryWrapper.orderByDesc(true,Storage::getCreateDate);
+        IPage<Storage> result = storageService.page(page, storageLambdaQueryWrapper);
         return Result.scu(result.getRecords(), result.getTotal());
 
     }

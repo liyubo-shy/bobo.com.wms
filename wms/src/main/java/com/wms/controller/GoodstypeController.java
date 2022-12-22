@@ -64,10 +64,10 @@ public class GoodstypeController {
         //每页数量
         page.setSize(query.getPageSize());
         //模糊查询by name
-        LambdaQueryWrapper<Goodstype> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.like(Goodstype::getName, param.get("name").toString());
-
-        IPage<Goodstype> result = goodstypeService.page(page, userLambdaQueryWrapper);
+        LambdaQueryWrapper<Goodstype> goodstypeLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        goodstypeLambdaQueryWrapper.like(Goodstype::getName, param.get("name").toString());
+        goodstypeLambdaQueryWrapper.orderByDesc(true,Goodstype::getCreateDate);
+        IPage<Goodstype> result = goodstypeService.page(page, goodstypeLambdaQueryWrapper);
         return Result.scu(result.getRecords(), result.getTotal());
 
     }
