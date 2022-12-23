@@ -12,7 +12,7 @@ import Plugin from 'v-fit-columns';
 
 // Vue.prototype.$httpUrl="http://192.168.3.161:8090"
 Vue.prototype.$httpUrl="http://localhost:8090"
-// Vue.prototype.$httpUrl="http://38deefe0.r2.cpolar.top"
+// Vue.prototype.$httpUrl="http://41cbf3fe.r2.cpolar.top"
 Vue.prototype.$axios =axios;
 Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false;
