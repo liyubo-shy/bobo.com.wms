@@ -3,9 +3,11 @@ package com.wms.entity;
 import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,13 +29,13 @@ public class Record implements Serializable {
     /**
      * 货品id
      */
+    @TableId(type = IdType.AUTO)
     private Integer goods;
 
     /**
      * 取货人/补货人
      */
-    @TableField("userId")
-    private Integer userid;
+    private Integer userId;
 
     /**
      * 操作人id

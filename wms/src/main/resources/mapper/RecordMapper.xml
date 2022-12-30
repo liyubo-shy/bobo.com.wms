@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.mapper.RecordMapper">
 
+    <select id="listRecord" resultType="com.wms.entity.RecordResult">
+        select re.id as id, g.name as good_name, uu.name as user_name, au.name as admin_name, g.count as count, g.remark as remark, g.create_date as create_date
+        from record re
+                 left join goods g on re.goods = g.id
+                 left join user au on re.admin_id = au.id
+                 left join user uu on re.user_id = uu.id
+        where re.goods = #{goods}
+          and re.admin_id = #{adminId}
+          and re.user_id = #{userId}
+
+    </select>
 </mapper>

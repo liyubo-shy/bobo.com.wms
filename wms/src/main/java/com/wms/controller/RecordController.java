@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
+
 /**
  * <p>
  * 前端控制器
@@ -47,10 +48,10 @@ public class RecordController {
 
         //精确查询by goods
         LambdaQueryWrapper<Record> recordLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        if ((param.get("goods") != null)){
+        if ((param.get("goods") != null)) {
             if (param.get("goods").toString().equals("")) {
                 recordLambdaQueryWrapper.like(Record::getGoods, param.get("goods").toString());
-            }else {
+            } else {
                 recordLambdaQueryWrapper.eq(Record::getGoods, param.get("goods").toString());
 
             }
@@ -69,5 +70,15 @@ public class RecordController {
         IPage<Record> result = recordService.page(page, recordLambdaQueryWrapper);
         return Result.scu(result.getRecords(), result.getTotal());
 
+    }
+
+    @PostMapping("/test")
+    public Result test(@RequestBody QueryPageParam queryPageParam) {
+        HashMap param = queryPageParam.getParam();
+        List<Record> records = recordService.listRecord(Integer.parseInt(param.get("goods").toString()), Integer.parseInt(param.get("userId").toString()), Integer.parseInt(param.get("adminId").toString()));
+        System.out.println(records.size());
+        String size_string = records.size() + "";
+        long size = Long.parseLong(size_string);
+        return Result.scu(records, size);
     }
 }

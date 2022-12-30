@@ -1,10 +1,16 @@
 package com.wms.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.entity.Record;
 import com.wms.mapper.RecordMapper;
 import com.wms.service.IRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +22,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> implements IRecordService {
+    @Autowired
+    private RecordMapper recordMapper;
 
+    @Override
+    public List<Record> listRecord(int goods, int userId, int adminId) {
+
+        return recordMapper.listRecord(goods,userId,adminId);
+    }
 }
