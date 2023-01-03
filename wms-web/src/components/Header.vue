@@ -44,7 +44,6 @@ export default {
   },
   methods: {
     toUser() {
-      console.log('个人中心');
       this.$router.push('/Home')
     },
     logOut() {
@@ -54,7 +53,6 @@ export default {
       }).then(() => {
         this.$router.push('/');
         sessionStorage.clear();
-        console.log('out')
 
         this.$message({
           type: 'success',

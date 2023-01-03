@@ -57,25 +57,35 @@ public class RecordController {
             }
 
         }
-        //模糊查询by username
-//        LambdaQueryWrapper<Record> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-//        userLambdaQueryWrapper.like(Record::getName, param.get("name").toString());
-//        //精确查询by sex
-//        userLambdaQueryWrapper.like(User::getSex, param.get("sex").toString());
-//        //精确查询by roleId
-//        userLambdaQueryWrapper.like(User::getRoleId, param.get("roleId").toString());
-//        //模糊查询by no
-//        userLambdaQueryWrapper.like(User::getNo, param.get("no").toString());
-//        userLambdaQueryWrapper.orderByDesc(true,User::getCreateDate);
+
         IPage<Record> result = recordService.page(page, recordLambdaQueryWrapper);
         return Result.scu(result.getRecords(), result.getTotal());
 
     }
 
-    @PostMapping("/test")
-    public Result test(@RequestBody QueryPageParam queryPageParam) {
+    @PostMapping("/listPage2")
+    public Result listPage2(@RequestBody QueryPageParam queryPageParam) {
         HashMap param = queryPageParam.getParam();
-        List<Record> records = recordService.listRecord(Integer.parseInt(param.get("goods").toString()), Integer.parseInt(param.get("userId").toString()), Integer.parseInt(param.get("adminId").toString()));
+        int pageSize = queryPageParam.getPageSize();
+        int pageNum = queryPageParam.getPageNum();
+        String goodstype = "";
+        String storage = "";
+        if (param.get("goodstype") != null) {
+            goodstype = param.get("goodstype").toString();
+        }
+        if (param.get("storage") != null) {
+            storage = param.get("storage").toString();
+        }
+
+        pageNum = (pageNum - 1) * pageSize;
+        List<Record> records = recordService.listRecord(param.get("goods").toString(),
+                param.get("userId").toString(),
+                param.get("adminId").toString(),
+                goodstype,
+                storage,
+                pageNum,
+                pageSize
+        );
         System.out.println(records.size());
         String size_string = records.size() + "";
         long size = Long.parseLong(size_string);

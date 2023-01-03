@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin-bottom: 5px">
-      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">物品类型：</span>
+      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">物品：</span>
       <el-input placeholder="请输入物品名"
                 v-model="goods"
                 suffix-icon="el-icon-search"
@@ -15,7 +15,7 @@
             v-for="item in storageData"
             :key="item.id"
             :label="item.name"
-            :value="item.id">
+            :value="item.name">
         </el-option>
       </el-select>
 
@@ -25,7 +25,7 @@
             v-for="item in goodsTypeData"
             :key="item.id"
             :label="item.name"
-            :value="item.id">
+            :value="item.name">
         </el-option>
       </el-select>
 
@@ -35,15 +35,7 @@
       <span style="margin-left:179px">操作：</span>
       <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
-      <el-button size="small"
-                 type="danger"
-                 @click="handleDelete()"
-                 class="btnItem"
-                 style="margin-left:10px;"
-                 icon="el-icon-delete"
-                 :disabled="multiple"
-      >批量删除
-      </el-button>
+
       <el-dialog
           :before-close="handleClose"
           title="请选择导出条数"
@@ -71,10 +63,27 @@
 
     </div>
 
+    <div>
+      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">操作人：</span>
+      <el-input placeholder="请输入操作人姓名"
+                v-model="userId"
+                suffix-icon="el-icon-search"
+                style="width: 160px"
+                @keyup.enter.native="search">
+      </el-input>
+      <span style="margin-left: 15px;font-size: 14px;color: #3f3f3f">管理人：</span>
+      <el-input placeholder="请输入管理人姓名"
+                v-model="adminId"
+                suffix-icon="el-icon-search"
+                style="width: 160px"
+                @keyup.enter.native="search">
+      </el-input>
+    </div>
+
     <el-table v-loading="list_loading"
               :row-style="{height: '40px'}"
               :cell-style="{padding: '3px'}"
-              height=550
+              height=530
               :stripe="true"
               @selection-change="handleSelectionChange"
               style="font-size: 14px"
@@ -85,28 +94,13 @@
       <el-table-column fixed="left" type="index" label="序号" width="60"></el-table-column>
       <el-table-column prop="id" label="id" v-if="false" sortable width="100"></el-table-column>
       <el-table-column fixed="left" prop="goods" label="物品名" sortable width="130"></el-table-column>
-      <el-table-column prop="userId" label="操作人" :formatter="formatGoodsType" sortable
-                       width="130"></el-table-column>
-      <el-table-column prop="adminId" label="管理人" :formatter="formatStorage" sortable width="280"></el-table-column>
+      <el-table-column prop="goodstype" label="物品类型" sortable width="130"></el-table-column>
+      <el-table-column prop="storage" label="所在仓库" sortable width="130"></el-table-column>
+      <el-table-column prop="userId" label="操作人" sortable width="130"></el-table-column>
+      <el-table-column prop="adminId" label="管理人" sortable width="130"></el-table-column>
       <el-table-column prop="count" label="数量" sortable width="80"></el-table-column>
       <el-table-column prop="remark" label="出入库备注" sortable width="300"></el-table-column>
       <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>
-      <el-table-column prop="operation" label="操作" width="130" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" @click="mod(scope.row)" title="编辑"></el-button>
-          <el-popconfirm
-              confirm-button-text='删除'
-              cancel-button-text='取消'
-              icon="el-icon-info"
-              icon-color="red"
-              title="确认删除该数据吗？"
-              @confirm="del(scope.row.id,scope.row.name)"
-              style="margin-left: 8px"
-          >
-            <el-button type="danger" icon="el-icon-delete" slot="reference" title="删除"></el-button>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
       <template slot="empty">
         <el-empty :image-size="180"></el-empty>
       </template>
@@ -206,7 +200,6 @@ export default {
     };
 
     return {
-      is_add: true,
       title_name: '',
       list_loading: false,
       tableData: [],
@@ -217,6 +210,8 @@ export default {
       storage: '',
       goodstype: '',
       goods:'',
+      userId:'',
+      adminId:'',
 
       dialogVisible: false, //导出选择框
       value: 0, //滑条数值
@@ -232,6 +227,7 @@ export default {
         storage: '',
         goodstype: '',
         count: ''
+
       },
 
       //多选
@@ -373,11 +369,15 @@ export default {
     //点击表单的取消按钮，清除验证结果
 
     loadPost() {
-
       this.list_loading = true
-      this.$axios.post(this.$httpUrl + '/record/listPage1', {
+      this.$axios.post(this.$httpUrl + '/record/listPage2', {
         param: {
-          goods: this.goods
+          goods: this.goods,
+          adminId: this.adminId,
+          userId: this.userId,
+          goodstype : this.goodstype,
+          storage:this.storage
+
         },
         pageNum: this.pageNum,
         pageSize: this.pageSize
@@ -418,39 +418,9 @@ export default {
     add() {
       this.title_name = '新增';
       this.centerDialogVisible = true;
-      this.is_add = true
       this.$nextTick(() => {
         this.resetForm();
       })
-    },
-    //点击编辑按钮，从表格拿到数据传给form
-    mod(row) {
-      this.title_name = '编辑';
-      this.is_add = false
-      this.form.id = row.id;
-      this.form.name = row.name;
-      this.form.remark = row.remark;
-      this.form.storage = row.storage;
-      this.form.goodstype = row.goodstype;
-      this.form.count = row.count;
-      console.log("仓库", row.storage)
-      console.log("仓库", row.goodstype)
-      // this.rules.password[0].required=false;
-      // this.rules.checkPass.required=false;
-      this.centerDialogVisible = true;
-
-    },
-    //删除
-    del(id, name) {
-      //  接口 点击确定就会走then
-      this.$axios.get(this.$httpUrl + '/record/delete?id=' + id)
-      this.$message({
-        message: '删除物品类型[' + name + ']成功~~~~~~~~~~~~~~~~~',
-        type: 'success'
-      })
-      console.log('dedede', name)
-      this.loadPost()
-
     },
     save() {
       //输入格式正确则保存
@@ -460,24 +430,17 @@ export default {
           this.$axios.post(this.$httpUrl + '/record/save', this.form).then(res => res.data).then(res => {
             console.log(res.data)
             if (res.code === 200) {   //判断状态码是否200
-              if (this.is_add) {
                 this.$message({
-                  message: '新增物品类型成功~~~',
+                  message: '新增出入库记录成功~~~',
                   type: 'success'
                 })
-              } else {
-                this.$message({
-                  message: '修改物品类型成功~~~',
-                  type: 'success'
-                })
-              }
 
               this.loadPost();
               this.centerDialogVisible = false
             } else {
               //状态码不为200，保存失败
               this.$message({
-                message: '新增物品类型失败！！！',
+                message: '新增出入库记录失败！！！',
                 type: 'error'
               });
             }

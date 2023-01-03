@@ -20,5 +20,12 @@ import java.util.List;
 @Mapper
 @Repository
 public interface RecordMapper extends BaseMapper<Record> {
-            List<Record> listRecord (@Param("goods") int goods, @Param("userId") int userId, @Param("adminId") int adminId);
+            List<Record> listRecord (
+                    @Param("goods") String goods,
+                    @Param("userId") String userId,
+                    @Param("adminId") String adminId,
+                    @Param("goodsType") String goodsType,
+                    @Param("storage") String storage,
+                    @Param("pageNum") int pageNum,
+                    @Param("pageSize") int pageSize);
 }

@@ -363,7 +363,6 @@ export default {
     },
     //删除
     del(id, name) {
-      console.log(id)
       this.$confirm('是否删除当前用户信息？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -388,10 +387,9 @@ export default {
       //输入格式正确则保存
       this.$refs.form.validate((valid) => {
         if (valid) {
-          console.log(this.form)
           //开始保存
           this.$axios.post(this.$httpUrl + '/user/save', this.form).then(res => res.data).then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             if (res.code === 200) {   //判断状态码是否200
               if (this.is_add) {
                 this.$message({
@@ -434,13 +432,13 @@ export default {
       this.$refs.form.resetFields();
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.pageNum = 1;
       this.loadPost()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.loadPost()
     }

@@ -15,6 +15,6 @@ import java.util.List;
  * @since 2022-12-23
  */
 public interface IRecordService extends IService<Record> {
-    List<Record> listRecord (int goods, int userId, int adminId);
+    List<Record> listRecord (String goods, String userId, String adminId,String goodstype,String storage,int pageNum,int pageSize);
 
 }

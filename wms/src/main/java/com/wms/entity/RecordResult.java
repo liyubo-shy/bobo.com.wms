@@ -25,17 +25,21 @@ public class RecordResult implements Serializable {
         /**
          * 取货人/补货人
          */
-        private String goodName;
+        private String goods;
 
+
+        private String goodstype;
+
+        private String storage;
         /**
          * 操作人id
          */
-        private String userName;
+        private String userId;
 
         /**
          * 数量
          */
-        private String adminName;
+        private String adminId;
 
         /**
          * 备注

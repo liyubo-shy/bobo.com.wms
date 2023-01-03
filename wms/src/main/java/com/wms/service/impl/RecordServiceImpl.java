@@ -3,6 +3,7 @@ package com.wms.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.entity.Record;
 import com.wms.mapper.RecordMapper;
+import com.wms.mapper.UserMapper;
 import com.wms.service.IRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     private RecordMapper recordMapper;
 
     @Override
-    public List<Record> listRecord(int goods, int userId, int adminId) {
+    public List<Record> listRecord(String goods, String userId, String adminId,String goodstype,String storage,int pageNum,int pageSize) {
 
-        return recordMapper.listRecord(goods,userId,adminId);
+        return recordMapper.listRecord(goods,userId,adminId,goodstype,storage,pageNum,pageSize);
     }
 }

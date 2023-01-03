@@ -51,13 +51,12 @@ export default {
         if (valid) { //valid成功为true，失败为false
           //去后台验证用户名密码
           this.$axios.post(this.$httpUrl + '/user/login', this.loginForm).then(res => res.data).then(res => {
-            console.log('res:',res)
             if (res.code === 200) {
               //存储
-              console.log('res.data:',res.data)
-              console.log("res.data.user:",res.data.name)
+              // console.log('res.data:',res.data)
+              // console.log("res.data.user:",res.data.name)
               sessionStorage.setItem("CurUser", JSON.stringify(res.data))
-              console.log("session:"+sessionStorage.getItem("CurUser"))
+              // console.log("session:"+sessionStorage.getItem("CurUser"))
               // console.log(res.data.menu, '-------')
               this.$store.commit("setMenu", res.data.menu)
               //跳转到主页
@@ -67,7 +66,7 @@ export default {
                 duration: 700
               });
               this.$router.replace('/Analysis');
-              console.log(JSON.parse(sessionStorage.getItem("CurUser")).name)
+              // console.log(JSON.parse(sessionStorage.getItem("CurUser")).name)
             } else {
               this.confirm_disabled = false;
               this.$notify.error({

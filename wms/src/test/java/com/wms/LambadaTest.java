@@ -22,15 +22,4 @@ import java.util.List;
 @SpringBootTest
 public class LambadaTest {
 
-    @Autowired
-    private RecordServiceImpl recordService;
-    @Autowired
-    private RecordMapper recordMapper;
-    @Test
-    public void test(){
-        List<Record> recordIPage = recordService.listRecord(1, 2, 2);
-        System.out.println("wahahaa"+recordIPage.size());
-        Record record = recordMapper.selectById(1);
-        System.out.println("num"+record.getCount());
-    }
 }

@@ -384,7 +384,6 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }).then(res => res.data).then(res => {
-        console.log(res.data)
         if (res.code === 200) {   //判断状态码是否200
           //结果集的数据传入tableData
           this.tableData = res.data
@@ -435,8 +434,6 @@ export default {
       this.form.storage = row.storage;
       this.form.goodstype = row.goodstype;
       this.form.count = row.count;
-      console.log("仓库", row.storage)
-      console.log("仓库", row.goodstype)
       // this.rules.password[0].required=false;
       // this.rules.checkPass.required=false;
       this.centerDialogVisible = true;
@@ -450,7 +447,6 @@ export default {
         message: '删除物品类型[' + name + ']成功~~~~~~~~~~~~~~~~~',
         type: 'success'
       })
-      console.log('dedede', name)
       this.loadPost()
 
     },
@@ -460,7 +456,6 @@ export default {
         if (valid) {
           //开始保存
           this.$axios.post(this.$httpUrl + '/goods/save', this.form).then(res => res.data).then(res => {
-            console.log(res.data)
             if (res.code === 200) {   //判断状态码是否200
               if (this.is_add) {
                 this.$message({
@@ -506,16 +501,15 @@ export default {
       this.form.goodstype = '';
       this.form.storage = '';
       this.form.count = '';
-      console.log('id', this.form.id)
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.pageNum = 1;
       this.loadPost()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.loadPost()
     },

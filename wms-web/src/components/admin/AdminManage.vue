@@ -334,7 +334,6 @@ export default {
       this.dialogVisible = true
       this.exportStep = handleExportNum(this.total, this.exportStep)
 
-      console.log(this.exportStep, 'stepppppp')
 
     },
     handleClose() {    //关闭窗口后清除value
@@ -365,7 +364,6 @@ export default {
         if (res.data.code === 200) {
           const columns = res.data.data
           const columnsData = []
-          console.log('data.data::::::::::', res.data.data)
           columns.forEach((row) => {
             const sums = {
               no: row.no,
@@ -464,7 +462,6 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }).then(res => res.data).then(res => {
-        console.log(res.data)
         if (res.code === 200) {   //判断状态码是否200
           //结果集的数据传入tableData
           this.tableData = res.data
@@ -582,14 +579,14 @@ export default {
     }
     ,
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.pageNum = 1;
       this.loadPost()
     }
     ,
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.loadPost()
     },
@@ -597,7 +594,7 @@ export default {
     //多选
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id);
-      console.log('多选id:', selection.map(item => item.id))
+      // console.log('多选id:', selection.map(item => item.id))
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
 
@@ -620,7 +617,6 @@ export default {
 
     },
     deleteMultiple() {
-      console.log(this.ids)
       this.$axios.post(this.$httpUrl + '/user/deleteByNoMul', this.ids)
       this.$message.success('批量删除成功!')
       //等待500ms后台删除完再刷新页面

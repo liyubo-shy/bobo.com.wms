@@ -27,7 +27,6 @@ function addNewRoute(menuList) {
     // resetRouter()
     for (let x of routes) {
         router.addRoute(x)
-        console.log(x)
 
     }
 
