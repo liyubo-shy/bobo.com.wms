@@ -1,7 +1,7 @@
 <template>
   <el-container style="height: 100vh; border: 1px solid #eee">
-    <el-aside :width="aside_width" style="background-color: rgb(238, 241, 246);margin-left: -1px ">
-      <div style="height: 60px;background-color: #13C2C2;">
+    <el-aside :width="aside_width" style="background-color: #495155;margin-left: -1px ">
+      <div style="height: 60px;background-color: #495155;">
         <img src="../img/logo.png" style="height: 40px;width: 40px;margin-left: 10px;margin-top: 10px">
       </div>
       <Aside :isCollapseResult="isCollapse"></Aside>
@@ -55,7 +55,7 @@ export default {
 
 <style scoped>
 .el-header {
-  background-color: #13C2C2;
+  background-color: #495155;
   color: #333;
   /*line-height: 60px;*/
 }

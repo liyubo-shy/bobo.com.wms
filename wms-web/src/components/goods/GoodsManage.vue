@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin-bottom: 5px">
-      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">物品类型：</span>
+      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">物品：</span>
       <el-input placeholder="请输入物品名"
                 v-model="name"
                 suffix-icon="el-icon-search"
@@ -19,7 +19,7 @@
         </el-option>
       </el-select>
 
-      <span style="margin-left: 15px">类型：</span>
+      <span style="margin-left: 15px;">类型：</span>
       <el-select v-model="goodstype" clearable placeholder="请选择类型">
         <el-option
             v-for="item in goodsTypeData"
@@ -28,11 +28,20 @@
             :value="item.id">
         </el-option>
       </el-select>
+      <span style="margin-left: 15px">状态：</span>
+      <el-select v-model="is_dis" filterable clearable placeholder="状态" style="margin-left: 5px; width: 120px">
+        <el-option
+            v-for="item in is_diss"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
 
       <el-button style="margin-left: 5px" type="primary" icon="el-icon-refresh-right" @click="reSet"
                  title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
-      <span style="margin-left:179px">操作：</span>
+      <span style="margin-left:30px">操作：</span>
       <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
       <el-button size="small"
@@ -42,7 +51,7 @@
                  style="margin-left:10px;"
                  icon="el-icon-delete"
                  :disabled="multiple"
-      >批量删除
+      >批量冻结
       </el-button>
       <el-dialog
           :before-close="handleClose"
@@ -85,26 +94,38 @@
       <el-table-column fixed="left" type="index" label="序号" width="60"></el-table-column>
       <el-table-column prop="id" label="id" v-if="false" sortable width="100"></el-table-column>
       <el-table-column fixed="left" prop="name" label="物品名" sortable width="130"></el-table-column>
-      <el-table-column prop="goodstype" label="物品类型" :formatter="formatGoodsType" sortable
-                       width="130"></el-table-column>
+      <el-table-column prop="goodstype" label="物品类型" :formatter="formatGoodsType" sortable width="130"></el-table-column>
       <el-table-column prop="storage" label="仓库" :formatter="formatStorage" sortable width="280"></el-table-column>
       <el-table-column prop="count" label="数量" sortable width="80"></el-table-column>
       <el-table-column prop="remark" label="物品备注" sortable width="300"></el-table-column>
+      <el-table-column prop="isDisabled" label="状态" sortable width="100">
+        <template slot-scope="scope">
+          <el-tag
+              :type="scope.row.isDisabled === 1 ? 'danger' :'success'"
+              disable-transitions>{{ scope.row.isDisabled === 1 ? '冻结' : '正常' }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>
       <el-table-column prop="updateDate" label="更新时间" sortable width="180"></el-table-column>
-      <el-table-column prop="operation" label="操作" width="130" fixed="right">
+      <el-table-column prop="operation" label="操作" width="180" fixed="right">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" @click="mod(scope.row)" title="编辑"></el-button>
+          <el-link type="primary" :underline="false" :disabled="scope.row.isDisabled===1">入库</el-link>
+          <span style="color: #d3dce6"> | </span>
+          <el-link type="primary" :underline="false" :disabled="scope.row.isDisabled===1">出库</el-link>
+          <span style="color: #d3dce6"> | </span>
+          <el-link type="primary" :underline="false" @click="mod(scope.row)" :disabled="scope.row.isDisabled===1">编辑</el-link>
+          <span style="color: #d3dce6"> |</span>
           <el-popconfirm
-              confirm-button-text='删除'
+              confirm-button-text='冻结'
               cancel-button-text='取消'
-              icon="el-icon-info"
+              icon="el-icon-warning-outline"
               icon-color="red"
-              title="确认删除该数据吗？"
+              title="确认冻结该物品吗？"
               @confirm="del(scope.row.id,scope.row.name)"
               style="margin-left: 8px"
           >
-            <el-button type="danger" icon="el-icon-delete" slot="reference" title="删除"></el-button>
+            <el-link style="font-weight: bold" type="danger" slot="reference" :underline="false" :disabled="scope.row.isDisable===1">冻结</el-link>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -153,12 +174,12 @@
         </el-form-item>
         <el-form-item label="物品名" prop="name">
           <el-col :span="15">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="form.name" :disabled="!is_add"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="数量" prop="count">
           <el-col :span="15">
-            <el-input v-model="form.count"></el-input>
+            <el-input v-model="form.count" :disabled="!is_add"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -217,6 +238,7 @@ export default {
       name: '',
       storage: '',
       goodstype: '',
+      is_dis:0,
 
       dialogVisible: false, //导出选择框
       value: 0, //滑条数值
@@ -233,6 +255,17 @@ export default {
         goodstype: '',
         count: ''
       },
+
+      is_diss:[
+        {
+          value:0,
+          label:"0.正常"
+        },
+        {
+          value: 1,
+          label: "1.冻结"
+        }
+      ],
 
       //多选
       ids: [],    // 选中数组
@@ -379,7 +412,8 @@ export default {
         param: {
           name: this.name,
           storage: this.storage,
-          goodstype: this.goodstype
+          goodstype: this.goodstype,
+          isDisabled:this.is_dis
         },
         pageNum: this.pageNum,
         pageSize: this.pageSize
@@ -442,9 +476,9 @@ export default {
     //删除
     del(id, name) {
       //  接口 点击确定就会走then
-      this.$axios.get(this.$httpUrl + '/goods/delete?id=' + id)
+      this.$axios.post(this.$httpUrl + '/goods/updateIsDisabled',{id:id})
       this.$message({
-        message: '删除物品类型[' + name + ']成功~~~~~~~~~~~~~~~~~',
+        message: '冻结物品[' + name + ']成功~~~~~~~~~~~~~~~~~',
         type: 'success'
       })
       this.loadPost()
@@ -522,7 +556,7 @@ export default {
 
     },
     handleDelete() {
-      this.$confirm("是否确认删除选中的数据项?", "警告", {
+      this.$confirm("是否确认冻结选中的数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -540,7 +574,9 @@ export default {
     },
     deleteMultiple() {
       console.log(this.ids)
-      this.$axios.post(this.$httpUrl + '/goods/deleteByNoMul', this.ids)
+      for (let i = 0; i < this.ids.length; i++) {
+        this.$axios.post(this.$httpUrl + '/goods/updateIsDisabled',{id:this.ids[i]})
+      }
       this.$message.success('批量删除成功!')
       //等待500ms后台删除完再刷新页面
       setTimeout(() => this.loadPost(), 500)

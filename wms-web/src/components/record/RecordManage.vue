@@ -98,7 +98,7 @@
       <el-table-column prop="storage" label="所在仓库" sortable width="130"></el-table-column>
       <el-table-column prop="userId" label="操作人" sortable width="130"></el-table-column>
       <el-table-column prop="adminId" label="管理人" sortable width="130"></el-table-column>
-      <el-table-column prop="count" label="数量" sortable width="80"></el-table-column>
+      <el-table-column prop="count" label="出入库数量" sortable width="120"></el-table-column>
       <el-table-column prop="remark" label="出入库备注" sortable width="300"></el-table-column>
       <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>
       <template slot="empty">
@@ -385,6 +385,7 @@ export default {
         console.log(res.data)
         if (res.code === 200) {   //判断状态码是否200
           //结果集的数据传入tableData
+          console.log("popopopop",res.data)
           this.tableData = res.data
           this.total = res.total
         } else {

@@ -9,6 +9,7 @@ import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Menu;
 import com.wms.entity.User;
+import com.wms.from.UserUpdateIsD;
 import com.wms.service.impl.MenuServiceImpl;
 import com.wms.service.impl.UserServiceImpl;
 import io.swagger.models.auth.In;
@@ -53,6 +54,7 @@ public class UserController {
     //新增
     @PostMapping("/save")
     public Result save(@RequestBody User user) {
+        user.setIsDisabled(0);
         return userService.saveOrUpdate(user) ? Result.scu() : Result.fail();
     }
 
@@ -142,6 +144,10 @@ public class UserController {
         page.setSize(query.getPageSize());
         //模糊查询by name
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if ((param.get("isDisabled") != null)){
+            userLambdaQueryWrapper.like(User::getIsDisabled,param.get("isDisabled").toString());
+            System.out.println("hahaha");
+        }
         userLambdaQueryWrapper.like(User::getName, param.get("name").toString());
         //精确查询by sex
         userLambdaQueryWrapper.like(User::getSex, param.get("sex").toString());
@@ -162,5 +168,13 @@ public class UserController {
         for (Integer id : ids){
             userService.removeById(id);
         }
+    }
+
+    //冻结
+
+    @PostMapping("/updateIsDisabled")
+    public void updateIsDisabled2(@RequestBody User user){
+        user.setIsDisabled(1);
+        userService.updateById(user);
     }
 }

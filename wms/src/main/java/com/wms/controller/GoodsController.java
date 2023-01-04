@@ -11,6 +11,7 @@ import com.wms.entity.Goods;
 import com.wms.entity.Goodstype;
 import com.wms.service.impl.GoodsServiceImpl;
 import com.wms.service.impl.GoodstypeServiceImpl;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,6 +69,7 @@ public class GoodsController {
         page.setSize(query.getPageSize());
         //模糊查询by name
         LambdaQueryWrapper<Goods> goodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        goodsLambdaQueryWrapper.like(Goods::getIsDisabled,param.get("isDisabled").toString());
         goodsLambdaQueryWrapper.like(Goods::getName, param.get("name").toString());
         //storage不为空则精确查询仓库
         if (!param.get("storage").toString().equals("")) {
@@ -96,5 +98,12 @@ public class GoodsController {
         for (Integer id : ids){
             goodsService.removeById(id);
         }
+    }
+
+    //禁用
+    @PostMapping("/updateIsDisabled")
+    public void updateIsDisabled(@RequestBody Goods goods){
+        goods.setIsDisabled(1);
+        goodsService.updateById(goods);
     }
 }

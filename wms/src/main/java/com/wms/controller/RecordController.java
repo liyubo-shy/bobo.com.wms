@@ -68,6 +68,8 @@ public class RecordController {
         HashMap param = queryPageParam.getParam();
         int pageSize = queryPageParam.getPageSize();
         int pageNum = queryPageParam.getPageNum();
+        pageNum = (pageNum - 1) * pageSize;
+
         String goodstype = "";
         String storage = "";
         if (param.get("goodstype") != null) {
@@ -77,8 +79,8 @@ public class RecordController {
             storage = param.get("storage").toString();
         }
 
-        pageNum = (pageNum - 1) * pageSize;
-        List<Record> records = recordService.listRecord(param.get("goods").toString(),
+        List<Record> records = recordService.listRecord(
+                param.get("goods").toString(),
                 param.get("userId").toString(),
                 param.get("adminId").toString(),
                 goodstype,

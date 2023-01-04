@@ -58,6 +58,11 @@ public class Goods implements Serializable {
     private String remark;
 
     /**
+     * 是否冻结
+     */
+    private Integer isDisabled;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)

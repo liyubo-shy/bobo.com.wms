@@ -2,6 +2,7 @@ package com.wms.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.entity.User;
+import com.wms.from.UserUpdateIsD;
 import com.wms.mapper.UserMapper;
 import com.wms.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -28,6 +29,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private UserMapper userMapper;
     @Override
     public IPage<User> pageC(IPage<User> page) {
+        userMapper.pageC(page);
         return null;
     }
 
@@ -39,5 +41,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Boolean myUpdate(Integer id,String name,Integer age,String phone,Integer sex) {
         return true;
+    }
+
+    @Override
+    public void updateIsDisabled(User user) {
+        userMapper.updateIsDisabled(user.getId());
     }
 }

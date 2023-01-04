@@ -3,6 +3,7 @@ package com.wms.mapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -18,6 +19,7 @@ public interface UserMapper extends BaseMapper<User> {
     IPage<User> pageC (IPage<User> page);
     void removeByNo();
     void myUpdate(String name,Integer age,String phone,Integer sex);
+    void updateIsDisabled(Integer id);
 
 
 }

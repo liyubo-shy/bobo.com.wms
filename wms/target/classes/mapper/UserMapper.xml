@@ -6,6 +6,9 @@
     <update id="myUpdate">
         update user set age = #{1} where id = #{0}
     </update>
+    <update id="updateIsDisabled">
+        update user set is_disabled = 1 where id = #{id}
+    </update>
 
     <delete id="removeByNo">
         delete from user where no in #{no}

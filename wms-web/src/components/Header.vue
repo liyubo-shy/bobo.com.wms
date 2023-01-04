@@ -4,7 +4,7 @@
       <i :class="colleIcon" style="font-size: 27px;color: #eeeeee;margin-left: 2px;cursor: pointer"
          @click="collapse"></i>
     </div>
-    <div style="flex: 1 ;font-size: 18px;color: white;">
+    <div style="flex: 1 ;font-size: 18px;color: #FFFFFF;">
       <span style="margin-right: 650px">惟手熟尔</span>
     </div>
 

@@ -64,10 +64,9 @@ public class User implements Serializable {
     private Integer roleId;
 
     /**
-     * 是否有效，Y有效，其他无效
+     * 是否冻结
      */
-    @TableField("isValid")
-    private String isvalid;
+    private Integer isDisabled;
 
     /**
      * 创建时间

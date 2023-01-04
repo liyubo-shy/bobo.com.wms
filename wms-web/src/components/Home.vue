@@ -22,7 +22,6 @@
 
       <el-descriptions class="margin-top" title="个人中心" :column="1" :size="size" border>
         <template slot="extra">
-          <el-button type="primary" size="small">操作</el-button>
         </template>
         <el-descriptions-item>
           <template slot="label">
@@ -107,7 +106,7 @@ export default {
     }
   }, methods: {
     backToMain(){
-      this.$router.push('/Main')
+      this.$router.push('/Analysis')
     }
   }
 }

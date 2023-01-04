@@ -24,11 +24,20 @@
             :value="item.value">
         </el-option>
       </el-select>
+      <span style="margin-left: 15px">状态：</span>
+      <el-select v-model="is_dis" filterable clearable placeholder="状态" style="margin-left: 5px; width: 120px">
+        <el-option
+            v-for="item in is_diss"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
       <el-button type="primary" style="margin-left: 5px" icon="el-icon-refresh-right" @click="reSet"
                  title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
 
-      <span style="margin-left:340px">操作：</span>
+      <span style="margin-left:150px">操作：</span>
       <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
       <el-button size="small"
@@ -36,9 +45,9 @@
                  @click="handleDelete()"
                  class="btnItem"
                  style="margin-left:10px;"
-                 icon="el-icon-delete"
+                 icon="el-icon-error"
                  :disabled="multiple"
-      >批量删除
+      >批量冻结
       </el-button>
       <el-dialog
           :before-close="handleClose"
@@ -77,7 +86,7 @@
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
-      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="selection" :selectable="selectEnable"></el-table-column>
       <el-table-column type="index" label="序号" width="60"></el-table-column>
       <el-table-column v-if="false" prop="id" label="id" sortable width="100"></el-table-column>
       <el-table-column prop="no" label="账号" sortable width="130"></el-table-column>
@@ -100,11 +109,19 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column prop="isDisabled" label="状态" sortable width="100">
+        <template slot-scope="scope">
+          <el-tag
+              :type="scope.row.isDisabled === 1 ? 'danger' :'success'"
+              disable-transitions>{{ scope.row.isDisabled === 1 ? '冻结' : '正常' }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>
       <el-table-column prop="updateDate" label="更新时间" sortable width="180"></el-table-column>
       <el-table-column prop="operation" label="操作" width="130" fixed="right">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" @click="mod(scope.row)" title="编辑"></el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="mod(scope.row)" :disabled="scope.row.isDisabled===1" title="编辑"></el-button>
           <el-popconfirm
               confirm-button-text='删除'
               cancel-button-text='取消'
@@ -114,7 +131,7 @@
               @confirm="del(scope.row.id,scope.row.name)"
               style="margin-left: 8px"
           >
-            <el-button type="danger" icon="el-icon-delete" slot="reference" title="删除"></el-button>
+            <el-button type="danger" icon="el-icon-error" slot="reference" :disabled="scope.row.isDisabled===1" title="删除"></el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -250,6 +267,8 @@ export default {
       sex: '',
       role: '',
       no: '',
+      is_dis: 0,
+
 
       //下拉框
       sexs: [
@@ -260,6 +279,16 @@ export default {
         {
           value: 1,
           label: "2. 男"
+        }
+      ],
+      is_diss: [
+        {
+          value: 0,
+          label: "0.正常"
+        },
+        {
+          value: 1,
+          label: "1.冻结"
         }
       ],
       //导出excel
@@ -457,11 +486,13 @@ export default {
           name: this.name,
           no: this.no,
           sex: this.sex,
-          roleId: 1
+          roleId: 1,
+          isDisabled:this.is_dis
         },
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }).then(res => res.data).then(res => {
+        console.log(res.data)
         if (res.code === 200) {   //判断状态码是否200
           //结果集的数据传入tableData
           this.tableData = res.data
@@ -521,10 +552,9 @@ export default {
     },
     //删除
     del(id, name) {
-
-      this.$axios.get(this.$httpUrl + '/user/delete?id=' + id)
+      this.$axios.post(this.$httpUrl + '/user/updateIsDisabled',{id:id})
       this.$message({
-        message: '删除用户[' + name + ']成功~~~~~~~~~~~~~~~~~',
+        message: '冻结用户[' + name + ']成功~~~~~~~~~~~~~~~~~',
         type: 'success'
       })
       this.loadPost()
@@ -579,14 +609,14 @@ export default {
     }
     ,
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
+      console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.pageNum = 1;
       this.loadPost()
     }
     ,
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
+      console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.loadPost()
     },
@@ -594,13 +624,13 @@ export default {
     //多选
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id);
-      // console.log('多选id:', selection.map(item => item.id))
+      console.log('多选id:', selection.map(item => item.id))
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
 
     },
     handleDelete() {
-      this.$confirm("是否确认删除选中的数据项?", "警告", {
+      this.$confirm("是否确认冻结选中的用户?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -617,11 +647,17 @@ export default {
 
     },
     deleteMultiple() {
-      this.$axios.post(this.$httpUrl + '/user/deleteByNoMul', this.ids)
-      this.$message.success('批量删除成功!')
+      console.log(this.ids)
+      for (let i = 0; i < this.ids.length; i++) {
+        this.$axios.post(this.$httpUrl+ '/user/updateIsDisabled',{id:this.ids[i]})
+      }
+      this.$message.success('批量冻结成功!')
       //等待500ms后台删除完再刷新页面
       setTimeout(() => this.loadPost(), 500)
 
+    },
+    selectEnable(row) {
+      return row.isDisabled !== 1;
     },
   },
 

@@ -4,6 +4,7 @@ import com.wms.entity.Goods;
 import com.wms.mapper.GoodsMapper;
 import com.wms.service.IGoodsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +17,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements IGoodsService {
+    @Autowired
+    private GoodsMapper goodsMapper;
 
+    @Override
+    public void updateIsDisabled(int id) {
+        goodsMapper.updateIsDisabled(id);
+    }
 }
