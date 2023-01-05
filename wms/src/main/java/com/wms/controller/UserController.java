@@ -85,12 +85,12 @@ public class UserController {
     @PostMapping("/update")
     public Boolean update(@RequestBody User user) {
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id",user.getId());
-        updateWrapper.set("name",user.getName());
-        updateWrapper.set("age",user.getAge());
-        updateWrapper.set("phone",user.getPhone());
-        updateWrapper.set("sex",user.getSex());
-        userService.update(new User(),updateWrapper);
+        updateWrapper.eq("id", user.getId());
+        updateWrapper.set("name", user.getName());
+        updateWrapper.set("age", user.getAge());
+        updateWrapper.set("phone", user.getPhone());
+        updateWrapper.set("sex", user.getSex());
+        userService.update(new User(), updateWrapper);
         return true;
 
     }
@@ -144,10 +144,12 @@ public class UserController {
         page.setSize(query.getPageSize());
         //模糊查询by name
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        if ((param.get("isDisabled") != null)){
-            userLambdaQueryWrapper.like(User::getIsDisabled,param.get("isDisabled").toString());
+
+        if ((param.get("isDisabled") != null)) {    //不为空则匹配条件
+            userLambdaQueryWrapper.like(User::getIsDisabled, param.get("isDisabled").toString());
             System.out.println("hahaha");
         }
+
         userLambdaQueryWrapper.like(User::getName, param.get("name").toString());
         //精确查询by sex
         userLambdaQueryWrapper.like(User::getSex, param.get("sex").toString());
@@ -155,7 +157,7 @@ public class UserController {
         userLambdaQueryWrapper.like(User::getRoleId, param.get("roleId").toString());
         //模糊查询by no
         userLambdaQueryWrapper.like(User::getNo, param.get("no").toString());
-        userLambdaQueryWrapper.orderByDesc(true,User::getCreateDate);
+        userLambdaQueryWrapper.orderByDesc(true, User::getCreateDate);
         IPage<User> result = userService.page(page, userLambdaQueryWrapper);
         List<User> records = result.getRecords();
         return Result.scu(result.getRecords(), result.getTotal());
@@ -165,7 +167,7 @@ public class UserController {
     //批量删除by no
     @PostMapping("/deleteByNoMul")
     public void deleteByNoMul(@RequestBody Integer[] ids) {
-        for (Integer id : ids){
+        for (Integer id : ids) {
             userService.removeById(id);
         }
     }
@@ -173,7 +175,7 @@ public class UserController {
     //冻结
 
     @PostMapping("/updateIsDisabled")
-    public void updateIsDisabled2(@RequestBody User user){
+    public void updateIsDisabled2(@RequestBody User user) {
         user.setIsDisabled(1);
         userService.updateById(user);
     }

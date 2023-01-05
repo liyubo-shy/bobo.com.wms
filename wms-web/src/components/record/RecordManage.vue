@@ -98,6 +98,14 @@
       <el-table-column prop="storage" label="所在仓库" sortable width="130"></el-table-column>
       <el-table-column prop="userId" label="操作人" sortable width="130"></el-table-column>
       <el-table-column prop="adminId" label="管理人" sortable width="130"></el-table-column>
+      <el-table-column prop="count" label="出库/入库" sortable width="120">
+        <template slot-scope="scope">
+          <el-tag
+              :type="scope.row.count > 0 ? 'success' :'danger'"
+              disable-transitions>{{ scope.row.count > 0 ? '入库' : '出库' }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="count" label="出入库数量" sortable width="120"></el-table-column>
       <el-table-column prop="remark" label="出入库备注" sortable width="300"></el-table-column>
       <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>

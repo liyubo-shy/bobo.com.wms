@@ -11,7 +11,7 @@
                         s.name        as storage,
                         uu.name       as userId,
                         au.name       as adminId,
-                        g.count       as count,
+                        re.count       as count,
                         g.remark      as remark,
                         g.create_date as create_date
                  from record re

@@ -90,7 +90,7 @@
               :data="tableData"
               :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
               border>
-      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="selection" :selectable="selectEnable"></el-table-column>
       <el-table-column fixed="left" type="index" label="序号" width="60"></el-table-column>
       <el-table-column prop="id" label="id" v-if="false" sortable width="100"></el-table-column>
       <el-table-column fixed="left" prop="name" label="物品名" sortable width="130"></el-table-column>
@@ -125,7 +125,7 @@
               @confirm="del(scope.row.id,scope.row.name)"
               style="margin-left: 8px"
           >
-            <el-link style="font-weight: bold" type="danger" slot="reference" :underline="false" :disabled="scope.row.isDisable===1">冻结</el-link>
+            <el-link style="font-weight: bold" type="danger" slot="reference" :underline="false" :disabled="scope.row.isDisabled===1">冻结</el-link>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -613,7 +613,10 @@ export default {
         return item.id === row.goodstype
       })
       return goodsTypeTemp && goodsTypeTemp.name
-    }
+    },
+    selectEnable(row) {
+      return row.isDisabled !== 1;
+    },
   },
 
 }
