@@ -7,10 +7,10 @@
                  :rules="rules" ref="loginForm">
           <el-form-item label="账号" prop="no">
             <el-input style="width: 200px" type="text" v-model="loginForm.no"
-                      autocomplete="off" size="small"></el-input>
+                      autocomplete="off" size="small" clearable></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input style="width: 200px" type="password" v-model="loginForm.password"
+            <el-input style="width: 200px" type="password" v-model="loginForm.password" clearable
                       show-password autocomplete="off" size="small" @keyup.enter.native="confirm"></el-input>
           </el-form-item>
           <el-form-item>

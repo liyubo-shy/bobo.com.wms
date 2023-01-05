@@ -96,7 +96,7 @@
       <el-table-column fixed="left" prop="name" label="物品名" sortable width="130"></el-table-column>
       <el-table-column prop="goodstype" label="物品类型" :formatter="formatGoodsType" sortable width="130"></el-table-column>
       <el-table-column prop="storage" label="仓库" :formatter="formatStorage" sortable width="280"></el-table-column>
-      <el-table-column prop="count" label="数量" sortable width="80"></el-table-column>
+      <el-table-column prop="count" label="库存" sortable width="80"></el-table-column>
       <el-table-column prop="remark" label="物品备注" sortable width="300"></el-table-column>
       <el-table-column prop="isDisabled" label="状态" sortable width="100">
         <template slot-scope="scope">

@@ -62,7 +62,7 @@ public class UserController {
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
         List<User> userList = userService.lambdaQuery().eq(User::getNo, user.getNo())
-                .eq(User::getPassword, user.getPassword()).list();
+                .eq(User::getPassword, user.getPassword()).eq(User::getIsDisabled,0).list();
         if (userList.size() > 0) {
             User user1 = userList.get(0);
             List<Menu> menuList = menuService.lambdaQuery().like(Menu::getMenuright, user1.getRoleId()).list();
