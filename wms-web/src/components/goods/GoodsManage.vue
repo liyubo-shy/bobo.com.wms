@@ -78,6 +78,66 @@
         </span>
       </el-dialog>
 
+      <el-dialog
+          :before-close="closeGoodsIn"
+          title="入库"
+          :close-on-click-modal="false"
+          :visible.sync="dialogVisible_goodsIn"
+          width="55%">
+        <el-form :inline="true" ref="form" :model="InOutform" :rules="rules_goodsIn" label-width="140px">
+
+          <el-form-item label="物品名:" prop="name" >
+            <el-input v-model="form.name" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="分类:" prop="goodstype">
+            <el-select disabled clearable v-model="InOutform.goodstype" placeholder="请选择分类">
+              <el-option
+                  v-for="item in goodsTypeData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="当前库存:" prop="count">
+            <el-input v-model="InOutform.count" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="入库数量:" prop="inCount">
+            <el-input-number size="medium" v-model="inCount" :min="0" :max="100000"></el-input-number>
+          </el-form-item>
+          <el-form-item label="操作人:" prop="userId">
+            <el-select filterable clearable v-model="InOutform.userId" placeholder="请选择操作人">
+              <el-option
+                  v-for="item in userData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="管理人:" prop="adminId">
+            <el-select filterable clearable v-model="InOutform.adminId" placeholder="请选择管理人">
+              <el-option
+                  v-for="item in userData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="入库备注:" prop="remark">
+            <el-input type="textarea" v-model="InOutform.remark" style="width: 600px;"></el-input>
+          </el-form-item>
+
+
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="closeGoodsIn">取 消</el-button>
+    <el-button type="primary" @click="saveIn">确 定</el-button>
+  </span>
+      </el-dialog>
+
     </div>
 
     <el-table v-loading="list_loading"
@@ -88,13 +148,14 @@
               @selection-change="handleSelectionChange"
               style="font-size: 14px"
               :data="tableData"
-              :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
+              :header-cell-style="{background:'#F1F1FA',color:'#564d4d'}"
               border>
       <el-table-column type="selection" :selectable="selectEnable"></el-table-column>
       <el-table-column fixed="left" type="index" label="序号" width="60"></el-table-column>
       <el-table-column prop="id" label="id" v-if="false" sortable width="100"></el-table-column>
       <el-table-column fixed="left" prop="name" label="物品名" sortable width="130"></el-table-column>
-      <el-table-column prop="goodstype" label="物品类型" :formatter="formatGoodsType" sortable width="130"></el-table-column>
+      <el-table-column prop="goodstype" label="物品类型" :formatter="formatGoodsType" sortable
+                       width="130"></el-table-column>
       <el-table-column prop="storage" label="仓库" :formatter="formatStorage" sortable width="280"></el-table-column>
       <el-table-column prop="count" label="库存" sortable width="80"></el-table-column>
       <el-table-column prop="remark" label="物品备注" sortable width="300"></el-table-column>
@@ -110,11 +171,14 @@
       <el-table-column prop="updateDate" label="更新时间" sortable width="180"></el-table-column>
       <el-table-column prop="operation" label="操作" width="180" fixed="right">
         <template slot-scope="scope">
-          <el-link type="primary" :underline="false" :disabled="scope.row.isDisabled===1">入库</el-link>
+          <el-link type="primary" :underline="false" :disabled="scope.row.isDisabled===1" @click="goodsIn(scope.row)">
+            入库
+          </el-link>
           <span style="color: #d3dce6"> | </span>
           <el-link type="primary" :underline="false" :disabled="scope.row.isDisabled===1">出库</el-link>
           <span style="color: #d3dce6"> | </span>
-          <el-link type="primary" :underline="false" @click="mod(scope.row)" :disabled="scope.row.isDisabled===1">编辑</el-link>
+          <el-link type="primary" :underline="false" @click="mod(scope.row)" :disabled="scope.row.isDisabled===1">编辑
+          </el-link>
           <span style="color: #d3dce6"> |</span>
           <el-popconfirm
               confirm-button-text='冻结'
@@ -125,7 +189,9 @@
               @confirm="del(scope.row.id,scope.row.name)"
               style="margin-left: 8px"
           >
-            <el-link style="font-weight: bold" type="danger" slot="reference" :underline="false" :disabled="scope.row.isDisabled===1">冻结</el-link>
+            <el-link style="font-weight: bold" type="danger" slot="reference" :underline="false"
+                     :disabled="scope.row.isDisabled===1">冻结
+            </el-link>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -238,9 +304,12 @@ export default {
       name: '',
       storage: '',
       goodstype: '',
-      is_dis:0,
+      is_dis: 0,
+      inCount: 0,
 
       dialogVisible: false, //导出选择框
+      dialogVisible_goodsIn: false,  //入库dialog
+      goodsId:0,  //出入库物品的id
       value: 0, //滑条数值
       checked: false,  //是否选择全部数据导出
       exportStep: 0,  //滑条步长
@@ -253,13 +322,26 @@ export default {
         remark: '',
         storage: '',
         goodstype: '',
-        count: ''
+        count: '',
+
+      },
+      //出入库表单
+      InOutform: {
+        id: '',
+        name: '',
+        remark: '',
+        storage: '',
+        goodstype: '',
+        count: '',
+        userId:'',
+        adminId:''
+
       },
 
-      is_diss:[
+      is_diss: [
         {
-          value:0,
-          label:"0.正常"
+          value: 0,
+          label: "0.正常"
         },
         {
           value: 1,
@@ -290,13 +372,26 @@ export default {
         ]
 
       },
+      rules_goodsIn: {
+        remark: [
+          {required: true, message: '请输入入库备注', trigger: 'blur'}
+        ],
+        userId:[
+          {required:true,message:'请选择操作人',trigger:'blur'}
+        ],
+        adminId:[
+          {required:true,message:'请选择管理人',trigger:'blur'}
+        ]
+      },
 
       //仓库数据
       storageData: [],
       options: [],
 
       //物品类型数据
-      goodsTypeData: []
+      goodsTypeData: [],
+      //出入库用户选择
+      userData:[]
     }
   },
   beforeMount() {
@@ -413,7 +508,7 @@ export default {
           name: this.name,
           storage: this.storage,
           goodstype: this.goodstype,
-          isDisabled:this.is_dis
+          isDisabled: this.is_dis
         },
         pageNum: this.pageNum,
         pageSize: this.pageSize
@@ -476,7 +571,7 @@ export default {
     //删除
     del(id, name) {
       //  接口 点击确定就会走then
-      this.$axios.post(this.$httpUrl + '/goods/updateIsDisabled',{id:id})
+      this.$axios.post(this.$httpUrl + '/goods/updateIsDisabled', {id: id})
       this.$message({
         message: '冻结物品[' + name + ']成功~~~~~~~~~~~~~~~~~',
         type: 'success'
@@ -575,7 +670,7 @@ export default {
     deleteMultiple() {
       console.log(this.ids)
       for (let i = 0; i < this.ids.length; i++) {
-        this.$axios.post(this.$httpUrl + '/goods/updateIsDisabled',{id:this.ids[i]})
+        this.$axios.post(this.$httpUrl + '/goods/updateIsDisabled', {id: this.ids[i]})
       }
       this.$message.success('批量删除成功!')
       //等待500ms后台删除完再刷新页面
@@ -616,6 +711,63 @@ export default {
     },
     selectEnable(row) {
       return row.isDisabled !== 1;
+    },
+    goodsIn(row) {
+      this.goodsId = row.id;
+      this.dialogVisible_goodsIn = true;
+      this.form.name = row.name;
+      this.form.count = row.count;
+      this.form.goodstype = row.goodstype;
+      this.form.storage = row.storage;
+      this.loadUser();
+    },
+    closeGoodsIn() {
+      this.inCount = 0;
+      this.dialogVisible_goodsIn = false
+    },
+    loadUser() {
+      this.$axios.get(this.$httpUrl + '/user/list').then(res => {
+        this.userData = res.data;
+      })
+    },
+    saveIn() {
+      //输入格式正确则保存
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          //开始保存
+          console.log('user:')
+          this.$axios.post(this.$httpUrl + '/record/saveIn', {
+            goods:this.goodsId,
+            goodstype:this.InOutform.goodstype,
+            storage:this.InOutform.storage,
+            userId:this.InOutform.userId,
+            adminId:this.InOutform.adminId,
+            count:this.inCount,
+            remark:this.InOutform.remark
+          }).then(res => res.data).then(res => {
+            if (res.code === 200) {   //判断状态码是否200
+                this.$message({
+                  message: '入库成功~~~',
+                  type: 'success'
+                })
+              this.loadPost();
+              this.centerDialogVisible = false
+            } else {
+              //状态码不为200，保存失败
+              this.$message({
+                message: '入库失败！！！',
+                type: 'error'
+              });
+            }
+          })
+        } else {
+          this.$message({
+            message: "请规范填写信息",
+            type: 'error'
+          });
+          return false;
+        }
+      });
     },
   },
 

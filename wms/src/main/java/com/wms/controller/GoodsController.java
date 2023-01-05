@@ -106,4 +106,5 @@ public class GoodsController {
         goods.setIsDisabled(1);
         goodsService.updateById(goods);
     }
+
 }

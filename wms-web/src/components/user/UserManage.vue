@@ -86,7 +86,7 @@
               id="userTable"
               style="font-size: 14px"
               :data="tableData"
-              :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
+              :header-cell-style="{background:'#F1F1FA',color:'#564d4d'}"
               border>
       <el-table-column type="selection" :selectable="selectEnable"></el-table-column>
       <el-table-column type="index" label="序号" width="60"></el-table-column>
@@ -240,6 +240,21 @@ export default {
       })
     };
 
+    //校验名字是否存在
+    let checkDuplicate_name = (rule, value, callback) => {
+      if (this.form.id) {
+        console.log('出去')
+        return callback();
+      }
+      this.$axios.get(this.$httpUrl + "/user/findByName?name=" + this.form.name).then(res => res.data).then(res => {
+        if (res.code !== 200)  {
+          callback()
+        } else {
+          callback(new Error('名字已经存在'));
+        }
+      })
+    };
+
     //校验密码
     let validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -326,6 +341,8 @@ export default {
       rules: {
         name: [
           {required: true, message: '请输入名字', trigger: 'blur'},
+          {validator: checkDuplicate_name, trigger: "blur"}
+
         ],
         no: [
           {required: true, message: '请输入账号', trigger: 'blur'},

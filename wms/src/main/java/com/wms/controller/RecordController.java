@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
+import com.wms.entity.Goods;
 import com.wms.entity.Record;
+import com.wms.service.impl.GoodsServiceImpl;
 import com.wms.service.impl.RecordServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,8 @@ import java.util.List;
 public class RecordController {
     @Autowired
     private RecordServiceImpl recordService;
+    @Autowired
+    private GoodsServiceImpl goodsService;
 
     @GetMapping("/list")
     public List<Record> list() {
@@ -92,5 +96,13 @@ public class RecordController {
         String size_string = records.size() + "";
         long size = Long.parseLong(size_string);
         return Result.scu(records, size);
+    }
+
+    @PostMapping("/saveIn")
+    public Result saveIn(@RequestBody Record record) {
+        Goods goods = goodsService.getById(record.getGoods());
+        goods.setCount(goods.getCount() + record.getCount());
+        goodsService.updateById(goods);
+        return recordService.save(record) && goodsService.updateById(goods) ? Result.scu() : Result.fail();
     }
 }

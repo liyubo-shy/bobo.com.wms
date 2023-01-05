@@ -12,8 +12,8 @@
                         uu.name       as userId,
                         au.name       as adminId,
                         re.count       as count,
-                        g.remark      as remark,
-                        g.create_date as create_date
+                        re.remark      as remark,
+                        re.create_date as create_date
                  from record re
                           left join goods g on re.goods = g.id
                           left join user au on re.admin_id = au.id
@@ -25,7 +25,7 @@
                    and uu.name LIKE  CONCAT('%',#{userId},'%')
                    and g2.name LIKE  CONCAT('%',#{goodsType},'%')
                    and s.name LIKE  CONCAT('%',#{storage},'%')
-                 order by re.create_date) as r
+                 order by re.create_date desc) as r
         limit #{pageNum},#{pageSize}
     </select>
 </mapper>

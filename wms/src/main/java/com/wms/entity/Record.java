@@ -27,9 +27,14 @@ public class Record implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 货品id
+     * id
      */
     @TableId(type = IdType.AUTO)
+    private Integer id;
+
+    /**
+     * 物品id
+     */
     private Integer goods;
 
     /**

@@ -37,7 +37,7 @@
               height=550
               style="font-size: 15px"
               :data="tableData"
-              :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
+              :header-cell-style="{background:'#F1F1FA',color:'#564d4d'}"
               border>
       <el-table-column prop="id" label="id" sortable width="80"></el-table-column>
       <el-table-column prop="no" label="账号" sortable width="180"></el-table-column>

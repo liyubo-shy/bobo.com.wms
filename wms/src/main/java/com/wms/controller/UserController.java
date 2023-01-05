@@ -41,7 +41,7 @@ public class UserController {
 
     @GetMapping("/list")
     public List<User> list() {
-        return userService.list();
+        return userService.lambdaQuery().eq(User::getIsDisabled,0).list();
     }
 
     //查询账号是否存在
@@ -50,7 +50,12 @@ public class UserController {
         List<User> list = userService.lambdaQuery().eq(User::getNo, no).list();
         return list.size() > 0 ? Result.scu(list) : Result.fail();
     }
-
+    //查询姓名是否存在
+    @GetMapping("/findByName")
+    public Result findByName(@RequestParam String name){
+        List<User> list = userService.lambdaQuery().eq(User::getName,name).list();
+        return list.size() > 0 ? Result.scu(list) : Result.fail();
+    }
     //新增
     @PostMapping("/save")
     public Result save(@RequestBody User user) {

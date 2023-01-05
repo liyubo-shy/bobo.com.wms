@@ -33,7 +33,7 @@
                  title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
       <span style="margin-left:179px">操作：</span>
-      <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="add" title="新增" :disabled="true"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
 
       <el-dialog
@@ -88,7 +88,7 @@
               @selection-change="handleSelectionChange"
               style="font-size: 14px"
               :data="tableData"
-              :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
+              :header-cell-style="{background:'#F1F1FA',color:'#564d4d'}"
               border>
       <el-table-column type="selection"></el-table-column>
       <el-table-column fixed="left" type="index" label="序号" width="60"></el-table-column>
@@ -237,6 +237,7 @@ export default {
         count: ''
 
       },
+
 
       //多选
       ids: [],    // 选中数组

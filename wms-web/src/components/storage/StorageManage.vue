@@ -60,7 +60,7 @@
               @selection-change="handleSelectionChange"
               style="font-size: 14px"
               :data="tableData"
-              :header-cell-style="{background:'#d7d7d7',color:'#564d4d'}"
+              :header-cell-style="{background:'#F1F1FA',color:'#564d4d'}"
               border>
       <el-table-column type="selection"></el-table-column>
       <el-table-column type="index" label="序号" width="60"></el-table-column>
