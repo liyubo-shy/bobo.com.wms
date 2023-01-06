@@ -27,8 +27,8 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     private RecordMapper recordMapper;
 
     @Override
-    public List<Record> listRecord(String goods, String userId, String adminId,String goodstype,String storage,int pageNum,int pageSize) {
+    public List<Record> listRecord(String goods, String userId, String adminId,String goodstype,String storage,int pageNum,int pageSize,int inOrOut) {
 
-        return recordMapper.listRecord(goods,userId,adminId,goodstype,storage,pageNum,pageSize);
+        return recordMapper.listRecord(goods,userId,adminId,goodstype,storage,pageNum,pageSize,inOrOut);
     }
 }

@@ -27,5 +27,6 @@ public interface RecordMapper extends BaseMapper<Record> {
                     @Param("goodsType") String goodsType,
                     @Param("storage") String storage,
                     @Param("pageNum") int pageNum,
-                    @Param("pageSize") int pageSize);
+                    @Param("pageSize") int pageSize,
+                    @Param("inOrOut") int inOrOut);
 }

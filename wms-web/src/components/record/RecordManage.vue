@@ -6,7 +6,8 @@
                 v-model="goods"
                 suffix-icon="el-icon-search"
                 style="width: 160px"
-                @keyup.enter.native="search">
+                @keyup.enter.native="search"
+                clearable>
       </el-input>
 
       <span style="margin-left: 15px">仓库：</span>
@@ -29,6 +30,49 @@
         </el-option>
       </el-select>
 
+      <span style="margin-left: 15px">创建时间：</span>
+      <el-date-picker
+          v-model="value2"
+          type="daterange"
+          align="right"
+          unlink-panels
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :picker-options="pickerOptions">
+      </el-date-picker>
+
+
+      <div style="width: 1317px;height: 8px"></div>
+
+
+      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">操作人：</span>
+      <el-input placeholder="请输入操作人姓名"
+                v-model="userId"
+                suffix-icon="el-icon-search"
+                style="width: 160px"
+                @keyup.enter.native="search"
+                clearable>
+      </el-input>
+      <span style="margin-left: 15px;font-size: 14px;color: #3f3f3f">管理人：</span>
+      <el-input placeholder="请输入管理人姓名"
+                v-model="adminId"
+                suffix-icon="el-icon-search"
+                style="width: 160px"
+                @keyup.enter.native="search"
+                clearable>
+      </el-input>
+
+      <span style="margin-left: 15px;font-size: 14px;color: #3f3f3f">类型：</span>
+      <el-select v-model="inOrOut" filterable clearable placeholder="出库/入库" style="margin-left: 5px; width: 120px">
+        <el-option
+            v-for="item in inOrOuts"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
+
       <el-button style="margin-left: 5px" type="primary" icon="el-icon-refresh-right" @click="reSet"
                  title="重置"></el-button>
       <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
@@ -41,7 +85,8 @@
           title="请选择导出条数"
           :close-on-click-modal="false"
           :visible.sync="dialogVisible"
-          width="40%">
+          width="40%"
+          center>
         <span>共{{ this.total }}条数据</span>
         <div class="block">
           <el-slider
@@ -63,22 +108,22 @@
 
     </div>
 
-    <div>
-      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">操作人：</span>
-      <el-input placeholder="请输入操作人姓名"
-                v-model="userId"
-                suffix-icon="el-icon-search"
-                style="width: 160px"
-                @keyup.enter.native="search">
-      </el-input>
-      <span style="margin-left: 15px;font-size: 14px;color: #3f3f3f">管理人：</span>
-      <el-input placeholder="请输入管理人姓名"
-                v-model="adminId"
-                suffix-icon="el-icon-search"
-                style="width: 160px"
-                @keyup.enter.native="search">
-      </el-input>
-    </div>
+<!--    <div>-->
+<!--      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">操作人：</span>-->
+<!--      <el-input placeholder="请输入操作人姓名"-->
+<!--                v-model="userId"-->
+<!--                suffix-icon="el-icon-search"-->
+<!--                style="width: 160px"-->
+<!--                @keyup.enter.native="search">-->
+<!--      </el-input>-->
+<!--      <span style="margin-left: 15px;font-size: 14px;color: #3f3f3f">管理人：</span>-->
+<!--      <el-input placeholder="请输入管理人姓名"-->
+<!--                v-model="adminId"-->
+<!--                suffix-icon="el-icon-search"-->
+<!--                style="width: 160px"-->
+<!--                @keyup.enter.native="search">-->
+<!--      </el-input>-->
+<!--    </div>-->
 
     <el-table v-loading="list_loading"
               :row-style="{height: '40px'}"
@@ -217,9 +262,10 @@ export default {
       name: '',
       storage: '',
       goodstype: '',
-      goods:'',
-      userId:'',
-      adminId:'',
+      goods: '',
+      userId: '',
+      adminId: '',
+      inOrOut:'',
 
       dialogVisible: false, //导出选择框
       value: 0, //滑条数值
@@ -238,6 +284,16 @@ export default {
 
       },
 
+      inOrOuts:[
+        {
+          value:0,
+          label:"出库"
+        },
+        {
+          value: 1,
+          label: "入库"
+        }
+      ],
 
       //多选
       ids: [],    // 选中数组
@@ -384,8 +440,9 @@ export default {
           goods: this.goods,
           adminId: this.adminId,
           userId: this.userId,
-          goodstype : this.goodstype,
-          storage:this.storage
+          goodstype: this.goodstype,
+          storage: this.storage,
+          inOrOut:this.inOrOut
 
         },
         pageNum: this.pageNum,
@@ -394,7 +451,7 @@ export default {
         console.log(res.data)
         if (res.code === 200) {   //判断状态码是否200
           //结果集的数据传入tableData
-          console.log("popopopop",res.data)
+          console.log("popopopop", res.data)
           this.tableData = res.data
           this.total = res.total
         } else {
@@ -440,10 +497,10 @@ export default {
           this.$axios.post(this.$httpUrl + '/record/save', this.form).then(res => res.data).then(res => {
             console.log(res.data)
             if (res.code === 200) {   //判断状态码是否200
-                this.$message({
-                  message: '新增出入库记录成功~~~',
-                  type: 'success'
-                })
+              this.$message({
+                message: '新增出入库记录成功~~~',
+                type: 'success'
+              })
 
               this.loadPost();
               this.centerDialogVisible = false

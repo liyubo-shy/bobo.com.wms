@@ -14,7 +14,7 @@
                       show-password autocomplete="off" size="small" @keyup.enter.native="confirm"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="confirm" :disabled="confirm_disabled">确 定</el-button>
+            <el-button style="width: 200px;font-size: 15px" type="primary" @click="confirm" :disabled="confirm_disabled">Login</el-button>
           </el-form-item>
         </el-form>
       </div>

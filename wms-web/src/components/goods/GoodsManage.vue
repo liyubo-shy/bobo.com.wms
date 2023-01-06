@@ -83,7 +83,8 @@
           title="入库"
           :close-on-click-modal="false"
           :visible.sync="dialogVisible_goodsIn"
-          width="55%">
+          width="55%"
+      center>
         <el-form :inline="true" ref="form" :model="InOutform" :rules="rules_goodsIn" label-width="140px">
 
           <el-form-item label="物品名:" prop="name" >
@@ -149,7 +150,8 @@
           title="出库"
           :close-on-click-modal="false"
           :visible.sync="dialogVisible_goodsOut"
-          width="55%">
+          width="55%"
+      center>
         <el-form :inline="true" ref="form" :model="InOutform" :rules="rules_goodsIn" label-width="140px">
 
           <el-form-item label="物品名:" prop="name" >

@@ -76,11 +76,17 @@ public class RecordController {
 
         String goodstype = "";
         String storage = "";
+        int inOrOut = 3;
         if (param.get("goodstype") != null) {
             goodstype = param.get("goodstype").toString();
         }
         if (param.get("storage") != null) {
             storage = param.get("storage").toString();
+        }
+        if (param.get("inOrOut") != null) {
+            if (!param.get("inOrOut").toString().equals("")) {
+                inOrOut = Integer.parseInt(param.get("inOrOut").toString());
+            }
         }
 
         List<Record> records = recordService.listRecord(
@@ -90,7 +96,8 @@ public class RecordController {
                 goodstype,
                 storage,
                 pageNum,
-                pageSize
+                pageSize,
+                inOrOut
         );
         System.out.println(records.size());
         String size_string = records.size() + "";
