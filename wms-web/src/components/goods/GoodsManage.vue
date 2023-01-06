@@ -111,7 +111,10 @@
                   v-for="item in userData"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.id">
+                  :value="item.id"
+                  :no="item.no">
+                <span style="float: left">{{ item.name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.no }}</span>
               </el-option>
             </el-select>
           </el-form-item>
@@ -122,7 +125,10 @@
                   v-for="item in adminData"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.id">
+                  :value="item.id"
+                  :no="item.no">
+                <span style="float: left">{{ item.name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.no }}</span>
               </el-option>
             </el-select>
           </el-form-item>
@@ -171,7 +177,10 @@
                   v-for="item in userData"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.id">
+                  :value="item.id"
+              :no="item.no">
+                <span style="float: left">{{ item.name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.no }}</span>
               </el-option>
             </el-select>
           </el-form-item>
@@ -182,7 +191,10 @@
                   v-for="item in adminData"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.id">
+                  :value="item.id"
+              :no="item.no">
+                <span style="float: left">{{ item.name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.no }}</span>
               </el-option>
             </el-select>
           </el-form-item>
