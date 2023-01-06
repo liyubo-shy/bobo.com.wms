@@ -21,5 +21,10 @@ import java.util.List;
  **/
 @SpringBootTest
 public class LambadaTest {
-
+    public static void main(String[] args) {
+        int a = 100;
+        String b ="-"+ a;
+        int i = Integer.parseInt(b);
+        System.out.println(i);
+    }
 }

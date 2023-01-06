@@ -108,7 +108,7 @@
       </el-table-column>
       <el-table-column prop="count" label="出入库数量" sortable width="120"></el-table-column>
       <el-table-column prop="remark" label="出入库备注" sortable width="300"></el-table-column>
-      <el-table-column prop="createDate" label="创建时间" sortable width="180"></el-table-column>
+      <el-table-column prop="createDate" fixed="right" label="创建时间" sortable width="180"></el-table-column>
       <template slot="empty">
         <el-empty :image-size="180"></el-empty>
       </template>

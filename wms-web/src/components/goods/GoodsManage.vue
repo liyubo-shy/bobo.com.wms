@@ -87,7 +87,7 @@
         <el-form :inline="true" ref="form" :model="InOutform" :rules="rules_goodsIn" label-width="140px">
 
           <el-form-item label="物品名:" prop="name" >
-            <el-input v-model="form.name" disabled></el-input>
+            <el-input v-model="InOutform.name" disabled></el-input>
           </el-form-item>
           <el-form-item label="分类:" prop="goodstype">
             <el-select disabled clearable v-model="InOutform.goodstype" placeholder="请选择分类">
@@ -103,7 +103,7 @@
             <el-input v-model="InOutform.count" disabled></el-input>
           </el-form-item>
           <el-form-item label="入库数量:" prop="inCount">
-            <el-input-number size="medium" v-model="inCount" :min="0" :max="100000"></el-input-number>
+            <el-input-number size="medium" v-model="inCount" :min="1" :max="99999999"></el-input-number>
           </el-form-item>
           <el-form-item label="操作人:" prop="userId">
             <el-select filterable clearable v-model="InOutform.userId" placeholder="请选择操作人">
@@ -135,6 +135,66 @@
         <span slot="footer" class="dialog-footer">
     <el-button @click="closeGoodsIn">取 消</el-button>
     <el-button type="primary" @click="saveIn">确 定</el-button>
+  </span>
+      </el-dialog>
+
+      <el-dialog
+          :before-close="closeGoodsOut"
+          title="入库"
+          :close-on-click-modal="false"
+          :visible.sync="dialogVisible_goodsOut"
+          width="55%">
+        <el-form :inline="true" ref="form" :model="InOutform" :rules="rules_goodsIn" label-width="140px">
+
+          <el-form-item label="物品名:" prop="name" >
+            <el-input v-model="InOutform.name" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="分类:" prop="goodstype">
+            <el-select disabled clearable v-model="InOutform.goodstype" placeholder="请选择分类">
+              <el-option
+                  v-for="item in goodsTypeData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="当前库存:" prop="count">
+            <el-input v-model="InOutform.count" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="出库数量:" prop="outCount">
+            <el-input-number size="medium" v-model="outCount" :min="1" :max="InOutform.count"></el-input-number>
+          </el-form-item>
+          <el-form-item label="操作人:" prop="userId">
+            <el-select filterable clearable v-model="InOutform.userId" placeholder="请选择操作人">
+              <el-option
+                  v-for="item in userData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="管理人:" prop="adminId">
+            <el-select filterable clearable v-model="InOutform.adminId" placeholder="请选择管理人">
+              <el-option
+                  v-for="item in userData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="入库备注:" prop="remark">
+            <el-input type="textarea" v-model="InOutform.remark" style="width: 600px;"></el-input>
+          </el-form-item>
+
+
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="closeGoodsOut">取 消</el-button>
+    <el-button type="primary" @click="saveOut">确 定</el-button>
   </span>
       </el-dialog>
 
@@ -175,7 +235,7 @@
             入库
           </el-link>
           <span style="color: #d3dce6"> | </span>
-          <el-link type="primary" :underline="false" :disabled="scope.row.isDisabled===1">出库</el-link>
+          <el-link type="primary" :underline="false" :disabled="scope.row.isDisabled===1" @click="goodsOut(scope.row)">出库</el-link>
           <span style="color: #d3dce6"> | </span>
           <el-link type="primary" :underline="false" @click="mod(scope.row)" :disabled="scope.row.isDisabled===1">编辑
           </el-link>
@@ -306,9 +366,11 @@ export default {
       goodstype: '',
       is_dis: 0,
       inCount: 0,
+      outCount:0,
 
       dialogVisible: false, //导出选择框
       dialogVisible_goodsIn: false,  //入库dialog
+      dialogVisible_goodsOut: false,  //入库dialog
       goodsId:0,  //出入库物品的id
       value: 0, //滑条数值
       checked: false,  //是否选择全部数据导出
@@ -715,15 +777,34 @@ export default {
     goodsIn(row) {
       this.goodsId = row.id;
       this.dialogVisible_goodsIn = true;
-      this.form.name = row.name;
-      this.form.count = row.count;
-      this.form.goodstype = row.goodstype;
-      this.form.storage = row.storage;
+      this.InOutform.name = row.name;
+      this.InOutform.count = row.count;
+      this.InOutform.goodstype = row.goodstype;
+      this.InOutform.storage = row.storage;
+      this.loadUser();
+    },
+    goodsOut(row) {
+      this.goodsId = row.id;
+      this.dialogVisible_goodsOut = true;
+      this.InOutform.name = row.name;
+      this.InOutform.count = row.count;
+      this.InOutform.goodstype = row.goodstype;
+      this.InOutform.storage = row.storage;
       this.loadUser();
     },
     closeGoodsIn() {
-      this.inCount = 0;
+      this.inCount = 1;
+      this.InOutform.remark = '';
+      this.InOutform.adminId = '';
+      this.InOutform.userId = '';
       this.dialogVisible_goodsIn = false
+    },
+    closeGoodsOut(){
+      this.outCount = 1;
+      this.InOutform.remark= '';
+      this.InOutform.adminId = '';
+      this.InOutform.userId = '';
+      this.dialogVisible_goodsOut = false;
     },
     loadUser() {
       this.$axios.get(this.$httpUrl + '/user/list').then(res => {
@@ -751,7 +832,7 @@ export default {
                   type: 'success'
                 })
               this.loadPost();
-              this.centerDialogVisible = false
+              this.dialogVisible_goodsIn = false
             } else {
               //状态码不为200，保存失败
               this.$message({
@@ -768,6 +849,48 @@ export default {
           return false;
         }
       });
+      this.closeGoodsIn();
+    },
+
+    saveOut() {
+      //输入格式正确则保存
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          //开始保存
+          console.log('user:')
+          this.$axios.post(this.$httpUrl + '/record/saveOut', {
+            goods:this.goodsId,
+            goodstype:this.InOutform.goodstype,
+            storage:this.InOutform.storage,
+            userId:this.InOutform.userId,
+            adminId:this.InOutform.adminId,
+            count:this.outCount,
+            remark:this.InOutform.remark
+          }).then(res => res.data).then(res => {
+            if (res.code === 200) {   //判断状态码是否200
+              this.$message({
+                message: '出库成功~~~',
+                type: 'success'
+              })
+              this.loadPost();
+              this.dialogVisible_goodsOut = false
+            } else {
+              //状态码不为200，保存失败
+              this.$message({
+                message: '出库失败！！！',
+                type: 'error'
+              });
+            }
+          })
+        } else {
+          this.$message({
+            message: "请规范填写信息",
+            type: 'error'
+          });
+          return false;
+        }
+      });
+      this.closeGoodsOut();
     },
   },
 

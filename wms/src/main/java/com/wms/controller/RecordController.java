@@ -105,4 +105,13 @@ public class RecordController {
         goodsService.updateById(goods);
         return recordService.save(record) && goodsService.updateById(goods) ? Result.scu() : Result.fail();
     }
+
+    @PostMapping("/saveOut")
+    public Result saveOut(@RequestBody Record record) {
+        record.setCount(Integer.parseInt("-" + record.getCount()));
+        Goods goods = goodsService.getById(record.getGoods());
+        goods.setCount(goods.getCount() + record.getCount());
+        goodsService.updateById(goods);
+        return recordService.save(record) && goodsService.updateById(goods) ? Result.scu() : Result.fail();
+    }
 }
