@@ -290,7 +290,7 @@ export default {
       no: '',
       sex: '',
       role: '',
-      is_dis: 0,
+      is_dis: '',
       sexs: [
         {
           value: 0,

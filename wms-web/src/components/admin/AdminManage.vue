@@ -281,7 +281,7 @@ export default {
       sex: '',
       role: '',
       no: '',
-      is_dis: 0,
+      is_dis:'',
 
 
       //下拉框

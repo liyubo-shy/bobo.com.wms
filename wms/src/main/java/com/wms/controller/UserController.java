@@ -44,6 +44,20 @@ public class UserController {
         return userService.lambdaQuery().eq(User::getIsDisabled,0).list();
     }
 
+    @GetMapping("/listUser")
+    public List<User> listUser(){
+        return userService.lambdaQuery()
+                .eq(User::getRoleId,2)
+                .eq(User::getIsDisabled,0).list();
+    }
+
+    @GetMapping("/listAdmin")
+    public List<User> listAdmin(){
+        return userService.lambdaQuery()
+                .in(User::getRoleId,1,0)
+                .eq(User::getIsDisabled,0).list();
+    }
+
     //查询账号是否存在
     @GetMapping("/findByNo")
     public Result findByNo(@RequestParam String no) {

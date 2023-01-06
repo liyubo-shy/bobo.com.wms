@@ -119,7 +119,7 @@
           <el-form-item label="管理人:" prop="adminId">
             <el-select filterable clearable v-model="InOutform.adminId" placeholder="请选择管理人">
               <el-option
-                  v-for="item in userData"
+                  v-for="item in adminData"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id">
@@ -140,7 +140,7 @@
 
       <el-dialog
           :before-close="closeGoodsOut"
-          title="入库"
+          title="出库"
           :close-on-click-modal="false"
           :visible.sync="dialogVisible_goodsOut"
           width="55%">
@@ -179,7 +179,7 @@
           <el-form-item label="管理人:" prop="adminId">
             <el-select filterable clearable v-model="InOutform.adminId" placeholder="请选择管理人">
               <el-option
-                  v-for="item in userData"
+                  v-for="item in adminData"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id">
@@ -364,7 +364,7 @@ export default {
       name: '',
       storage: '',
       goodstype: '',
-      is_dis: 0,
+      is_dis: '',
       inCount: 0,
       outCount:0,
 
@@ -453,7 +453,8 @@ export default {
       //物品类型数据
       goodsTypeData: [],
       //出入库用户选择
-      userData:[]
+      userData:[],
+      adminData:[]
     }
   },
   beforeMount() {
@@ -807,8 +808,12 @@ export default {
       this.dialogVisible_goodsOut = false;
     },
     loadUser() {
-      this.$axios.get(this.$httpUrl + '/user/list').then(res => {
+      this.$axios.get(this.$httpUrl + '/user/listUser').then(res => {
         this.userData = res.data;
+      })
+
+      this.$axios.get(this.$httpUrl + '/user/listAdmin').then(res => {
+        this.adminData = res.data;
       })
     },
     saveIn() {
