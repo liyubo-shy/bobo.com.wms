@@ -19,7 +19,7 @@
         </el-option>
       </el-select>
 
-      <span style="margin-left: 15px">类型：</span>
+      <span style="margin-left: 15px">物品类型：</span>
       <el-select v-model="goodstype" clearable placeholder="请选择类型">
         <el-option
             v-for="item in goodsTypeData"

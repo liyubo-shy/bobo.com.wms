@@ -40,6 +40,7 @@ public class GoodsController {
     //新增或更新
     @PostMapping("/save")
     public Result save(@RequestBody Goods goods) {
+        goods.setIsDisabled(0);
         return goodsService.saveOrUpdate(goods) ? Result.scu() : Result.fail();
     }
 
