@@ -38,14 +38,16 @@
 
       <span style="margin-left: 15px">创建时间：</span>
       <el-date-picker
-          v-model="value2"
+          v-model="selectDate"
           type="daterange"
           align="right"
           unlink-panels
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          :picker-options="pickerOptions">
+          :picker-options="pickerOptions"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd">
       </el-date-picker>
 
 
@@ -114,22 +116,6 @@
 
     </div>
 
-<!--    <div>-->
-<!--      <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">操作人：</span>-->
-<!--      <el-input placeholder="请输入操作人姓名"-->
-<!--                v-model="userId"-->
-<!--                suffix-icon="el-icon-search"-->
-<!--                style="width: 160px"-->
-<!--                @keyup.enter.native="search">-->
-<!--      </el-input>-->
-<!--      <span style="margin-left: 15px;font-size: 14px;color: #3f3f3f">管理人：</span>-->
-<!--      <el-input placeholder="请输入管理人姓名"-->
-<!--                v-model="adminId"-->
-<!--                suffix-icon="el-icon-search"-->
-<!--                style="width: 160px"-->
-<!--                @keyup.enter.native="search">-->
-<!--      </el-input>-->
-<!--    </div>-->
 
     <el-table v-loading="list_loading"
               :row-style="{height: '40px'}"
@@ -277,6 +263,36 @@ export default {
       value: 0, //滑条数值
       checked: false,  //是否选择全部数据导出
       exportStep: 0,  //滑条步长
+
+      //时间选择最近日期
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      selectDate:'',
 
 
       centerDialogVisible: false,
@@ -448,8 +464,9 @@ export default {
           userId: this.userId,
           goodstype: this.goodstype,
           storage: this.storage,
-          inOrOut:this.inOrOut
-
+          inOrOut:this.inOrOut,
+          startDate:this.selectDate[0],
+          endDate:this.selectDate[1]
         },
         pageNum: this.pageNum,
         pageSize: this.pageSize
@@ -474,6 +491,7 @@ export default {
 
     //查询
     search() {
+      console.log('时间：',this.selectDate)
       //每次查询后显示第一页
       this.pageNum = 1;
       this.loadPost()

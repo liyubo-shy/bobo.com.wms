@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author bobo
@@ -20,13 +20,15 @@ import java.util.List;
 @Mapper
 @Repository
 public interface RecordMapper extends BaseMapper<Record> {
-            List<Record> listRecord (
-                    @Param("goods") String goods,
-                    @Param("userId") String userId,
-                    @Param("adminId") String adminId,
-                    @Param("goodsType") String goodsType,
-                    @Param("storage") String storage,
-                    @Param("pageNum") int pageNum,
-                    @Param("pageSize") int pageSize,
-                    @Param("inOrOut") int inOrOut);
+    List<Record> listRecord(
+            @Param("goods") String goods,
+            @Param("userId") String userId,
+            @Param("adminId") String adminId,
+            @Param("goodsType") String goodsType,
+            @Param("storage") String storage,
+            @Param("pageNum") int pageNum,
+            @Param("pageSize") int pageSize,
+            @Param("inOrOut") int inOrOut,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate);
 }

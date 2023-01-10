@@ -72,10 +72,13 @@ public class RecordController {
         HashMap param = queryPageParam.getParam();
         int pageSize = queryPageParam.getPageSize();
         int pageNum = queryPageParam.getPageNum();
-        pageNum = (pageNum- 1) * pageSize;
+        pageNum = (pageNum - 1) * pageSize;
 
         String goodstype = "";
         String storage = "";
+        String startDate = "";
+        String endDate = "";
+
         int inOrOut = 3;
         if (param.get("goodstype") != null) {
             goodstype = param.get("goodstype").toString();
@@ -88,6 +91,12 @@ public class RecordController {
                 inOrOut = Integer.parseInt(param.get("inOrOut").toString());
             }
         }
+        if (param.get("startDate") != null) {
+            startDate = param.get("startDate").toString();
+        }
+        if (param.get("endDate") != null) {
+            endDate = param.get("startDate").toString();
+        }
 
         List<Record> records = recordService.listRecord(
                 param.get("goods").toString(),
@@ -97,7 +106,9 @@ public class RecordController {
                 storage,
                 pageNum,
                 pageSize,
-                inOrOut
+                inOrOut,
+                startDate,
+                endDate
         );
         System.out.println(records.size());
         String size_string = records.size() + "";
