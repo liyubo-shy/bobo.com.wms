@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div style="height: 40px">
+      <el-breadcrumb separator="/" style="font-size: medium">
+        <el-breadcrumb-item :to="{ path: '/Analysis' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>仓库管理</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <div style="margin-bottom: 5px">
       <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">仓库：</span>
       <el-input placeholder="请输入仓库名"
@@ -55,7 +61,7 @@
     <el-table v-loading="list_loading"
               :row-style="{height: '40px'}"
               :cell-style="{padding: '3px'}"
-              height=550
+              height=510
               :stripe="true"
               @selection-change="handleSelectionChange"
               style="font-size: 14px"

@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div style="height: 40px">
+      <el-breadcrumb separator="/" style="font-size: medium">
+        <el-breadcrumb-item :to="{ path: '/Analysis' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>账号管理</el-breadcrumb-item>
+        <el-breadcrumb-item>管理员管理</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <div style="margin-bottom: 5px">
       <span style="margin-left: 5px;font-size: 14px;color: #3f3f3f">姓名：</span>
       <el-input placeholder="请输入名字"
@@ -81,7 +88,7 @@
               id="adminable"
               :stripe="true"
               @selection-change="handleSelectionChange"
-              height=550
+              height=510
               style="font-size: 14px"
               :data="tableData"
               :header-cell-style="{background:'#F1F1FA',color:'#564d4d'}"
