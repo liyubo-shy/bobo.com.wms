@@ -10,7 +10,6 @@ import com.wms.entity.Goods;
 import com.wms.entity.Record;
 import com.wms.service.impl.GoodsServiceImpl;
 import com.wms.service.impl.RecordServiceImpl;
-import com.wms.vo.ExportRecordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -96,7 +95,7 @@ public class RecordController {
             startDate = param.get("startDate").toString();
         }
         if (param.get("endDate") != null) {
-            endDate = param.get("startDate").toString();
+            endDate = param.get("endDate").toString();
         }
 
         List<Record> records = recordService.listRecord(

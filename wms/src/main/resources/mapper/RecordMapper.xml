@@ -32,13 +32,19 @@
                 and re.count &lt; #{inOrOut}
             </if>
 
-            <if test="startDate!=null">
-                and re.create_date >= #{startDate}
+            <!-- 开始创建时间，结束创建时间都不为空 -->
+            <if test="startDate!='' and endDate!=''">
+                AND re.create_date &gt;= #{startDate}
+                AND re.create_date &lt;= #{endDate}
             </if>
-            <if test="endDate!=null">
-                and re.create_date >= #{endDate}
+            <!-- 开始不为空，结束为空 '' -->
+            <if test="startDate!='' and endDate==''">
+                AND re.create_date &gt;= #{startDate}
             </if>
-
+            <!-- 开始为空 ''，结束不为空 -->
+            <if test="startDate=='' and endDate!=''">
+                AND re.create_date &lt;= #{endDate}
+            </if>
 
         </where>
 

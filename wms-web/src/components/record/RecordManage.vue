@@ -40,15 +40,15 @@
       <el-date-picker
           size="mini"
           v-model="selectDate"
-          type="daterange"
+          type="datetimerange"
           align="right"
           unlink-panels
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd">
+
+          :default-time="['00:00:00', '23:59:59']">
       </el-date-picker>
 
 
@@ -294,6 +294,8 @@ export default {
         }]
       },
       selectDate: '',
+      startDate: '',
+      endDate: '',
 
 
       centerDialogVisible: false,
@@ -484,9 +486,7 @@ export default {
 
     loadPost() {
       this.list_loading = true
-      if (this.selectDate === null) {
-        this.selectDate = ''
-      }
+
       this.$axios.post(this.$httpUrl + '/record/listPage2', {
         param: {
           goods: this.goods,
@@ -495,8 +495,8 @@ export default {
           goodstype: this.goodstype,
           storage: this.storage,
           inOrOut: this.inOrOut,
-          startDate: this.selectDate[0],
-          endDate: this.selectDate[1]
+          startDate: this.startDate,
+          endDate: this.endDate
         },
         pageNum: this.pageNum,
         pageSize: this.pageSize
@@ -522,6 +522,19 @@ export default {
     //查询
     search() {
       console.log('时间：', this.selectDate)
+      for (let i = 0; i < this.selectDate.length; i++) {
+        let y = this.selectDate[i].getFullYear();
+        let m = (this.selectDate[i].getMonth() + 1) >= 10 ? (this.selectDate[i].getMonth() + 1) : "0" + (this.selectDate[i].getMonth() + 1);
+        let d = (this.selectDate[i].getDate()) >= 10 ? (this.selectDate[i].getDate()) : "0" + (this.selectDate[i].getDate());
+        let h = (this.selectDate[i].getHours()) >= 10 ? (this.selectDate[i].getHours()) : "0" + (this.selectDate[i].getHours());
+        let mm = (this.selectDate[i].getMinutes()) >= 10 ? (this.selectDate[i].getMinutes()) : "0" + (this.selectDate[i].getMinutes());
+        let s = (this.selectDate[i].getSeconds()) >= 10 ? (this.selectDate[i].getSeconds()) : "0" + (this.selectDate[i].getSeconds());
+        let time = y + '-' + m + '-' + d + ' ' + h + ':' + mm + ':' + s
+        console.log('新时间', time)
+        i === 0 ? this.startDate = time : this.endDate = time
+      }
+      console.log('start',this.startDate)
+      console.log('end',this.endDate)
       //每次查询后显示第一页
       this.pageNum = 1;
       this.loadPost()
