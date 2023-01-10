@@ -38,6 +38,7 @@
 
       <span style="margin-left: 15px">创建时间：</span>
       <el-date-picker
+          size="mini"
           v-model="selectDate"
           type="daterange"
           align="right"
@@ -457,6 +458,9 @@ export default {
 
     loadPost() {
       this.list_loading = true
+      if (this.selectDate === null){
+        this.selectDate=''
+      }
       this.$axios.post(this.$httpUrl + '/record/listPage2', {
         param: {
           goods: this.goods,
