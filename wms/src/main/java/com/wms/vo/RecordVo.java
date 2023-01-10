@@ -1,4 +1,4 @@
-package com.wms.entity;
+package com.wms.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class RecordResult implements Serializable {
+public class RecordVo implements Serializable {
 
 
         private static final long serialVersionUID = 1L;

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.mapper.RecordMapper">
 
-    <select id="listRecord" resultType="com.wms.entity.RecordResult">
+    <select id="listRecord" resultType="com.wms.vo.RecordVo">
         select *
         from (
         select re.id as id,

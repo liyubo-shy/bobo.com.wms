@@ -72,7 +72,7 @@ public class RecordController {
         HashMap param = queryPageParam.getParam();
         int pageSize = queryPageParam.getPageSize();
         int pageNum = queryPageParam.getPageNum();
-        pageNum = (pageNum - 1) * pageSize;
+        pageNum = (pageNum- 1) * pageSize;
 
         String goodstype = "";
         String storage = "";
