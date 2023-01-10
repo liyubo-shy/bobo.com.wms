@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +20,18 @@ import java.util.List;
 @Repository
 public interface RecordMapper extends BaseMapper<Record> {
     List<Record> listRecord(
+            @Param("goods") String goods,
+            @Param("userId") String userId,
+            @Param("adminId") String adminId,
+            @Param("goodsType") String goodsType,
+            @Param("storage") String storage,
+            @Param("pageNum") int pageNum,
+            @Param("pageSize") int pageSize,
+            @Param("inOrOut") int inOrOut,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate);
+
+    List<Record> exportRecord(
             @Param("goods") String goods,
             @Param("userId") String userId,
             @Param("adminId") String adminId,

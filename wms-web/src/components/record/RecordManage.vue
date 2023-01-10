@@ -258,7 +258,7 @@ export default {
       goods: '',
       userId: '',
       adminId: '',
-      inOrOut:'',
+      inOrOut: '',
 
       dialogVisible: false, //导出选择框
       value: 0, //滑条数值
@@ -293,7 +293,7 @@ export default {
           }
         }]
       },
-      selectDate:'',
+      selectDate: '',
 
 
       centerDialogVisible: false,
@@ -307,10 +307,10 @@ export default {
 
       },
 
-      inOrOuts:[
+      inOrOuts: [
         {
-          value:0,
-          label:"出库"
+          value: 0,
+          label: "出库"
         },
         {
           value: 1,
@@ -378,9 +378,19 @@ export default {
       }
       this.dialogVisible = false
       this.$message.warning('正在导出数据,请稍等~')
-      this.$axios.post(this.$httpUrl + '/record/listPage1', {
+      if (this.selectDate === null) {
+        this.selectDate = ''
+      }
+      this.$axios.post(this.$httpUrl + '/record/exportRecord', {
         param: {
-          name: this.name,
+          goods: this.goods,
+          adminId: this.adminId,
+          userId: this.userId,
+          goodstype: this.goodstype,
+          storage: this.storage,
+          inOrOut: this.inOrOut,
+          startDate: this.selectDate[0],
+          endDate: this.selectDate[1]
         },
         pageNum: this.pageNum,
         pageSize: exportNum
@@ -391,10 +401,16 @@ export default {
           const columnsData = []
           columns.forEach((row) => {
             const sums = {
-              name: row.name,
+              name: row.goods,
+              goodstype: row.goodstype,
+              storage: row.storage,
+              userId: row.userId,
+              adminId: row.adminId,
+              inOrOut: row.inOrOut,
+              count: row.count,
               remark: row.remark,
-              createDate: row.createDate,
-              updateDate: row.updateDate
+              create_date: row.createDate
+
             }
             columnsData.push(sums)
           })
@@ -407,17 +423,27 @@ export default {
     handleDownload(tableData) {
       import('@/options/ExportExcel').then((excel) => {
         const tHeader = [
+          '物品名',
           '物品类型',
+          '所在仓库',
+          '操作人',
+          '管理人',
+          '出库/入库',
+          '出入库数量',
           '备注',
-          '创建时间',
-          '更新时间'
+          '创建时间'
         ]
 
         const filterVal = [
           'name',
+          'goodstype',
+          'storage',
+          'userId',
+          'adminId',
+          'inOrOut',
+          'count',
           'remark',
-          'createDate',
-          'updateDate'
+          'create_date'
         ]
         const data = this.formatJson(filterVal, tableData)
         const date = new Date()
@@ -427,11 +453,11 @@ export default {
         let h = date.getHours()
         let mm = date.getMinutes()
         let s = date.getSeconds()
-        const time = y + '-' + m + '-' + d + ' ' + h + ':' + mm + ':' + s
+        const time = y + '-' + m + '-' + d + ' ' + h + '时' + mm + '分' + s + '秒'
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: `物品类型列表(${time})`
+          filename: `出入库履历(${time})`
         })
         this.$message.success('导出成功')
       })
@@ -458,8 +484,8 @@ export default {
 
     loadPost() {
       this.list_loading = true
-      if (this.selectDate === null){
-        this.selectDate=''
+      if (this.selectDate === null) {
+        this.selectDate = ''
       }
       this.$axios.post(this.$httpUrl + '/record/listPage2', {
         param: {
@@ -468,9 +494,9 @@ export default {
           userId: this.userId,
           goodstype: this.goodstype,
           storage: this.storage,
-          inOrOut:this.inOrOut,
-          startDate:this.selectDate[0],
-          endDate:this.selectDate[1]
+          inOrOut: this.inOrOut,
+          startDate: this.selectDate[0],
+          endDate: this.selectDate[1]
         },
         pageNum: this.pageNum,
         pageSize: this.pageSize
@@ -495,7 +521,7 @@ export default {
 
     //查询
     search() {
-      console.log('时间：',this.selectDate)
+      console.log('时间：', this.selectDate)
       //每次查询后显示第一页
       this.pageNum = 1;
       this.loadPost()

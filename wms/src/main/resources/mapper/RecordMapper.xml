@@ -46,4 +46,48 @@
         order by re.create_date desc) as r
         limit #{pageNum},#{pageSize}
     </select>
+    <select id="exportRecord" resultType="com.wms.vo.ExportRecordVo">
+        select *
+        from (
+        select re.id as id,
+        g.name as goods,
+        g2.name as goodstype,
+        s.name as storage,
+        uu.name as userId,
+        au.name as adminId,
+        CASE
+        WHEN re.count > 0 THEN
+        '入库' ELSE '出库'
+        END AS inOrOut,
+        re.count as count,
+        re.remark as remark,
+        re.create_date as create_date
+        from record re
+        left join goods g on re.goods = g.id
+        left join user au on re.admin_id = au.id
+        left join user uu on re.user_id = uu.id
+        left join storage s on g.storage = s.id
+        left join goodstype g2 on g.goodsType = g2.id
+        <where>g.name like CONCAT('%', #{goods}, '%')
+            and au.name LIKE CONCAT('%', #{adminId}, '%')
+            and uu.name LIKE CONCAT('%', #{userId}, '%')
+            and g2.name LIKE CONCAT('%', #{goodsType}, '%')
+            and s.name LIKE CONCAT('%', #{storage}, '%')
+            <if test="inOrOut!=null and inOrOut==1">
+                and re.count &gt; #{inOrOut}-1
+            </if>
+            <if test="inOrOut!=null and inOrOut==0">
+                and re.count &lt; #{inOrOut}
+            </if>
+
+            <if test="startDate!=null">
+                and re.create_date >= #{startDate}
+            </if>
+            <if test="endDate!=null">
+                and re.create_date >= #{endDate}
+            </if>
+        </where>
+        order by re.create_date desc) as r
+        limit #{pageNum},#{pageSize}
+    </select>
 </mapper>

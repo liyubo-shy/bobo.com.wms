@@ -10,6 +10,7 @@ import com.wms.entity.Goods;
 import com.wms.entity.Record;
 import com.wms.service.impl.GoodsServiceImpl;
 import com.wms.service.impl.RecordServiceImpl;
+import com.wms.vo.ExportRecordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -116,6 +117,54 @@ public class RecordController {
         return Result.scu(records, size);
     }
 
+    @PostMapping("/exportRecord")
+    public Result exportRecord(@RequestBody QueryPageParam queryPageParam) {
+        HashMap param = queryPageParam.getParam();
+        int pageSize = queryPageParam.getPageSize();
+        int pageNum = queryPageParam.getPageNum();
+        pageNum = (pageNum - 1) * pageSize;
+
+        String goodstype = "";
+        String storage = "";
+        String startDate = "";
+        String endDate = "";
+
+        int inOrOut = 3;
+        if (param.get("goodstype") != null) {
+            goodstype = param.get("goodstype").toString();
+        }
+        if (param.get("storage") != null) {
+            storage = param.get("storage").toString();
+        }
+        if (param.get("inOrOut") != null) {
+            if (!param.get("inOrOut").toString().equals("")) {
+                inOrOut = Integer.parseInt(param.get("inOrOut").toString());
+            }
+        }
+        if (param.get("startDate") != null) {
+            startDate = param.get("startDate").toString();
+        }
+        if (param.get("endDate") != null) {
+            endDate = param.get("startDate").toString();
+        }
+
+        List<Record> records = recordService.exportRecord(
+                param.get("goods").toString(),
+                param.get("userId").toString(),
+                param.get("adminId").toString(),
+                goodstype,
+                storage,
+                pageNum,
+                pageSize,
+                inOrOut,
+                startDate,
+                endDate
+        );
+        System.out.println(records.size());
+        String size_string = records.size() + "";
+        long size = Long.parseLong(size_string);
+        return Result.scu(records, size);
+    }
     @PostMapping("/saveIn")
     public Result saveIn(@RequestBody Record record) {
         Goods goods = goodsService.getById(record.getGoods());
