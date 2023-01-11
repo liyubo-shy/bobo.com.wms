@@ -96,4 +96,26 @@
         order by re.create_date desc) as r
         limit #{pageNum},#{pageSize}
     </select>
+    <select id="recordInAnalysis" resultType="com.wms.vo.RecordAnalysisVo">
+        SELECT *
+        FROM (SELECT DATE_FORMAT(create_date, CONCAT('%Y-%m-%d')) as date, sum(count) as count
+              FROM record
+              WHERE count &gt; 0
+              GROUP BY date
+              order by date desc
+              limit 31) AS r
+        order by date;
+
+    </select>
+    <select id="recordOutAnalysis" resultType="com.wms.vo.RecordAnalysisVo">
+        SELECT *
+        FROM (SELECT DATE_FORMAT(create_date, CONCAT('%Y-%m-%d')) as date, sum(count) * -1 as count
+              FROM record
+              WHERE count &lt; 0
+              GROUP BY date
+              order by date desc
+              limit 31) AS r
+        order by date;
+
+    </select>
 </mapper>

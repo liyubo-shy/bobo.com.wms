@@ -35,5 +35,6 @@ public interface IRecordService extends IService<Record> {
             int inOrOut,
             String startDate,
             String endDate);
-
+    List<Record> recordInAnalysis();
+    List<Record> recordOutAnalysis();
 }

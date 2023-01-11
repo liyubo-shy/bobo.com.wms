@@ -38,6 +38,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
                 startDate,
                 endDate);
     }
+
     public List<Record> exportRecord(String goods, String userId, String adminId, String goodstype, String storage, int pageNum, int pageSize, int inOrOut, String startDate, String endDate) {
         return recordMapper.exportRecord(
                 goods,
@@ -50,5 +51,12 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
                 inOrOut,
                 startDate,
                 endDate);
+    }
+
+    public List<Record> recordInAnalysis(){
+        return recordMapper.recordInAnalysis();
+    }
+    public List<Record> recordOutAnalysis(){
+        return recordMapper.recordOutAnalysis();
     }
 }

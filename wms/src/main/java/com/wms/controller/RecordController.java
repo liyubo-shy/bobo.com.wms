@@ -10,6 +10,7 @@ import com.wms.entity.Goods;
 import com.wms.entity.Record;
 import com.wms.service.impl.GoodsServiceImpl;
 import com.wms.service.impl.RecordServiceImpl;
+import com.wms.vo.RecordAnalysisVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -187,5 +188,20 @@ public class RecordController {
         boolean updateByIdResult = goodsService.updateById(goods);
         lock.unlock();
         return recordService.save(record) && updateByIdResult ? Result.scu() : Result.fail();
+    }
+
+    @GetMapping("/recordInAnalysis")
+    public List<Record> recordInAnalysis(){
+        List<Record> records = recordService.recordInAnalysis();
+        System.out.println("!!!!!!!!!");
+        System.out.println(records);
+        return records;
+    }
+    @GetMapping("/recordOutAnalysis")
+    public List<Record> recordOutAnalysis(){
+        List<Record> records = recordService.recordOutAnalysis();
+        System.out.println("!!!!!!!!!");
+        System.out.println(records);
+        return records;
     }
 }

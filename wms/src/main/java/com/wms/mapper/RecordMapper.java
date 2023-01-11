@@ -42,4 +42,6 @@ public interface RecordMapper extends BaseMapper<Record> {
             @Param("inOrOut") int inOrOut,
             @Param("startDate") String startDate,
             @Param("endDate") String endDate);
+    List<Record> recordInAnalysis();
+    List<Record> recordOutAnalysis();
 }

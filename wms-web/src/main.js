@@ -8,6 +8,7 @@ import VueRouter from "vue-router";
 import router from "@/router";
 import store from './store';
 import echarts from 'echarts'
+import ECharts from 'vue-echarts'
 import Plugin from 'v-fit-columns';
 
 // Vue.prototype.$httpUrl="http://192.168.3.161:8090"
@@ -19,6 +20,7 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(Plugin);
 
+Vue.component('ECharts',ECharts);
 // Vue.use(ElementUI);
 // Vue.prototype.$ELEMENT = { size: 'medium' };
 Vue.use(ElementUI,{size:'small'});

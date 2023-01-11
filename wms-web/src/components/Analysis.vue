@@ -1,51 +1,121 @@
 <template>
-  <div>
-    <div id="myChart" :style="{width: '600px', height: '600px'}"></div>
+  <div id="app">
+    <el-breadcrumb separator="/" style="font-size: medium">
+      <el-breadcrumb-item :to="{ path: '/Analysis' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>报表</el-breadcrumb-item>
+    </el-breadcrumb>
+    <e-charts class="inOrOutAnalysis" :options="option"></e-charts>
   </div>
 </template>
 
 <script>
-// 引入基本模板
-let echarts = require('echarts/lib/echarts')
-// 引入柱状图组件
-require('echarts/lib/chart/bar')
-// 引入提示框和title组件
-require('echarts/lib/component/tooltip')
-require('echarts/lib/component/title')
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name:'Analysis',
+  name: 'Analysis',
   data() {
+
     return {
-      msg: 'Welcome to Your Vue.js App'
+      inDate: [],
+      outDate: [],
+
+
     }
-  },
-  mounted() {
-    this.drawLine();
   },
   methods: {
-    drawLine() {
-      // 基于准备好的dom，初始化echarts实例
-      let myChart = echarts.init(document.getElementById('myChart'))
-      // 绘制图表
-      myChart.setOption({
-        title: { text: 'ECharts 入门示例' },
-        tooltip: {},
-        xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-        },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      });
+    getDate() {
+      this.$axios.get(this.$httpUrl + '/record/recordInAnalysis').then(res => {
+        this.inDate = res.data;
+      })
+      this.$axios.get(this.$httpUrl + '/record/recordOutAnalysis').then(res => {
+        this.outDate = res.data;
+      })
     }
+  },
+  computed: {
+    option() {
+      return {
+        // Make gradient line here
+        visualMap: [
+          {
+            show: false,
+            type: 'continuous',
+            seriesIndex: 0,
+            min: 0,
+            max: 1000
+          },
+          {
+            show: false,
+            type: 'continuous',
+            seriesIndex: 1,
+            dimension: 1,
+            min: 0,
+            max: 1000
+          }
+        ],
+        title: [
+          {
+            left: 'center',
+            text: '入库月报'
+          },
+          {
+            top: '55%',
+            left: 'center',
+            text: '出库月报'
+          }
+        ],
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: [
+          {
+            data: this.inDate.map(d => d.date)
+          },
+          {
+            data: this.outDate.map(d => d.date),
+            gridIndex: 1
+          }
+        ],
+        yAxis: [
+          {},
+          {
+            gridIndex: 1
+          }
+        ],
+        grid: [
+          {
+            bottom: '60%'
+          },
+          {
+            top: '60%'
+          }
+        ],
+        series: [
+          {
+            type: 'bar',
+            showSymbol: false,
+            data: this.inDate.map(d => d.count)
+          },
+          {
+            type: 'bar',
+            showSymbol: false,
+            data: this.outDate.map(d => d.count),
+            xAxisIndex: 1,
+            yAxisIndex: 1
+          }
+        ]
+      }
+    }
+  },
+  created() {
+    this.getDate()
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="css" scoped>
+.inOrOutAnalysis {
+  height: 600px;
+  width: 1000px;
+}
 </style>
