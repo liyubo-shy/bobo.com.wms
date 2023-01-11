@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
@@ -166,18 +168,24 @@ public class RecordController {
     }
     @PostMapping("/saveIn")
     public Result saveIn(@RequestBody Record record) {
+        Lock lock = new ReentrantLock();
+        lock.lock();
         Goods goods = goodsService.getById(record.getGoods());
         goods.setCount(goods.getCount() + record.getCount());
-        goodsService.updateById(goods);
-        return recordService.save(record) && goodsService.updateById(goods) ? Result.scu() : Result.fail();
+        boolean updateByIdResult = goodsService.updateById(goods);
+        lock.unlock();
+        return recordService.save(record) && updateByIdResult ? Result.scu() : Result.fail();
     }
 
     @PostMapping("/saveOut")
     public Result saveOut(@RequestBody Record record) {
+        Lock lock = new ReentrantLock();
+        lock.lock();
         record.setCount(Integer.parseInt("-" + record.getCount()));
         Goods goods = goodsService.getById(record.getGoods());
         goods.setCount(goods.getCount() + record.getCount());
-        goodsService.updateById(goods);
-        return recordService.save(record) && goodsService.updateById(goods) ? Result.scu() : Result.fail();
+        boolean updateByIdResult = goodsService.updateById(goods);
+        lock.unlock();
+        return recordService.save(record) && updateByIdResult ? Result.scu() : Result.fail();
     }
 }
