@@ -5,6 +5,7 @@ import com.wms.entity.Record;
 import com.wms.mapper.RecordMapper;
 import com.wms.service.IRecordService;
 import com.wms.service.impl.RecordServiceImpl;
+import io.swagger.models.auth.In;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,9 +23,12 @@ import java.util.List;
 @SpringBootTest
 public class LambadaTest {
     public static void main(String[] args) {
-        int a = 100;
-        String b ="-"+ a;
-        int i = Integer.parseInt(b);
-        System.out.println(i);
+        Integer a1 = 100;
+        Integer a2 = 100;
+        System.out.println(a1 == a2);
+
+        Integer b1 = 200;
+        Integer b2 = 200;
+        System.out.println(b1 == b2);
     }
 }

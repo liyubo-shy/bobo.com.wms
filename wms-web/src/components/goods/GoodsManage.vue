@@ -114,7 +114,7 @@
             <el-input-number size="medium" v-model="inCount" :min="1" :max="99999999"></el-input-number>
           </el-form-item>
           <el-form-item label="操作人:" prop="userId">
-            <el-select filterable clearable v-model="InOutform.userId" placeholder="请选择操作人">
+            <el-select filterable clearable v-model="InOutform.userId" placeholder="请选择操作人" disabled>
               <el-option
                   v-for="item in userData"
                   :key="item.id"
@@ -180,19 +180,23 @@
           <el-form-item label="出库数量:" prop="outCount">
             <el-input-number size="medium" v-model="outCount" :min="1" :max="InOutform.count"></el-input-number>
           </el-form-item>
+
           <el-form-item label="操作人:" prop="userId">
-            <el-select filterable clearable v-model="InOutform.userId" placeholder="请选择操作人">
-              <el-option
-                  v-for="item in userData"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-              :no="item.no">
-                <span style="float: left">{{ item.name }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.no }}</span>
-              </el-option>
-            </el-select>
+            <el-input v-model="InOutform.userId" disabled>{{}}</el-input>
           </el-form-item>
+<!--          <el-form-item label="操作人:" prop="userId">-->
+<!--            <el-select filterable clearable v-model="InOutform.userId" placeholder="请选择操作人" disabled>-->
+<!--              <el-option-->
+<!--                  v-for="item in userData"-->
+<!--                  :key="item.id"-->
+<!--                  :label="item.name"-->
+<!--                  :value="item.id"-->
+<!--              :no="item.no">-->
+<!--                <span style="float: left">{{ item.name }}</span>-->
+<!--                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.no }}</span>-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
 
           <el-form-item label="管理人:" prop="adminId">
             <el-select filterable clearable v-model="InOutform.adminId" placeholder="请选择管理人">
@@ -803,6 +807,7 @@ export default {
       this.InOutform.count = row.count;
       this.InOutform.goodstype = row.goodstype;
       this.InOutform.storage = row.storage;
+      this.InOutform.userId = JSON.parse(sessionStorage.getItem("CurUser")).user.name
       this.loadUser();
     },
     goodsOut(row) {
@@ -812,6 +817,7 @@ export default {
       this.InOutform.count = row.count;
       this.InOutform.goodstype = row.goodstype;
       this.InOutform.storage = row.storage;
+      this.InOutform.userId = JSON.parse(sessionStorage.getItem("CurUser")).user.name
       this.loadUser();
     },
     closeGoodsIn() {
@@ -847,7 +853,7 @@ export default {
             goods:this.goodsId,
             goodstype:this.InOutform.goodstype,
             storage:this.InOutform.storage,
-            userId:this.InOutform.userId,
+            userId:JSON.parse(sessionStorage.getItem("CurUser")).user.id,
             adminId:this.InOutform.adminId,
             count:this.inCount,
             remark:this.InOutform.remark
@@ -888,7 +894,7 @@ export default {
             goods:this.goodsId,
             goodstype:this.InOutform.goodstype,
             storage:this.InOutform.storage,
-            userId:this.InOutform.userId,
+            userId:JSON.parse(sessionStorage.getItem("CurUser")).user.id,
             adminId:this.InOutform.adminId,
             count:this.outCount,
             remark:this.InOutform.remark
