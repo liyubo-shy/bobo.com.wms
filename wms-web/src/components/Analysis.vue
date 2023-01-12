@@ -135,7 +135,7 @@ export default {
         title:{
           bottom: '1%',
           left: 'center',
-          text: '物品库存数'
+          text: '物品分类库存'
         },
         series: [
           {
@@ -179,7 +179,7 @@ export default {
         title:{
           bottom: '1%',
           left: 'center',
-          text: '仓库库存数'
+          text: '仓库在库数'
         },
         series: [
           {
