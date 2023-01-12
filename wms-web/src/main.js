@@ -11,7 +11,7 @@ import echarts from 'echarts'
 import ECharts from 'vue-echarts'
 import Plugin from 'v-fit-columns';
 
-// Vue.prototype.$httpUrl="http://192.168.3.161:8090"
+// Vue.prototype.$httpUrl="http://10.205.103.130:8090/"
 Vue.prototype.$httpUrl="http://localhost:8090"
 // Vue.prototype.$httpUrl="http://622e004e.r7.cpolar.top"
 Vue.prototype.$axios =axios;

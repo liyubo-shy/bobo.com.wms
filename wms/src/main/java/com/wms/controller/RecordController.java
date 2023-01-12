@@ -76,8 +76,6 @@ public class RecordController {
         HashMap param = queryPageParam.getParam();
         int pageSize = queryPageParam.getPageSize();
         int pageNum = queryPageParam.getPageNum();
-        pageNum = (pageNum - 1) * pageSize;
-
         String goodstype = "";
         String storage = "";
         String startDate = "";
@@ -115,9 +113,6 @@ public class RecordController {
                 startDate,
                 endDate
         );
-//        System.out.println(records.size());
-//        String size_string = records.size() + "";
-//        long size = Long.parseLong(size_string);
         return Result.scu(records.getRecords(), records.getTotal());
     }
 
