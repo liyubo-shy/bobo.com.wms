@@ -5,6 +5,9 @@
       <el-breadcrumb-item>报表</el-breadcrumb-item>
     </el-breadcrumb>
     <e-charts class="inOrOutAnalysis" :options="inOrOutOption"></e-charts>
+    <div class="bu">
+      <el-button icon="el-icon-refresh" @click="getDate()" type="primary" style="float: right;"></el-button>
+    </div>
     <e-charts class="goodsCountAnalysis" :options="goodsCountOption"></e-charts>
     <e-charts class="storageAnalysis" :options="storageOption"></e-charts>
   </div>
@@ -224,11 +227,15 @@ export default {
 .goodsCountAnalysis{
   float: left;
   width: 500px;
-  height: 300px;
+  height: 280px;
 }
 .storageAnalysis{
   float: left;
   width: 500px;
-  height: 300px;
+  height: 280px;
+}
+.bu{
+  float: right;
+  margin-right: 50px;
 }
 </style>
