@@ -1,15 +1,27 @@
 <template>
   <div id="app">
-    <el-breadcrumb separator="/" style="font-size: medium">
-      <el-breadcrumb-item :to="{ path: '/Analysis' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>报表</el-breadcrumb-item>
-    </el-breadcrumb>
-    <e-charts class="inOrOutAnalysis" :options="inOrOutOption"></e-charts>
-    <div class="bu">
-      <el-button icon="el-icon-refresh" @click="getDate()" type="primary" style="float: right;"></el-button>
+    <div>
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="物流信息统计" name="first">
+          <div>
+            <e-charts class="inOrOutAnalysis" :options="inOrOutOption"></e-charts>
+            <div class="bu">
+              <el-button icon="el-icon-refresh" @click="getDate()" type="primary" style="float: right;"></el-button>
+            </div>
+            <e-charts class="goodsCountAnalysis" :options="goodsCountOption"></e-charts>
+            <e-charts class="storageAnalysis" :options="storageOption"></e-charts>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="用户信息统计" name="second">
+          <div class="bu">
+            <el-button icon="el-icon-refresh" @click="getDate()" type="primary" style="float: right;"></el-button>
+          </div>
+          <div style="border: #42b983 1px solid; width: 1320px; height:580px">
+            <e-charts class="userInfoAnalysis" :options="userInfoOption"></e-charts>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </div>
-    <e-charts class="goodsCountAnalysis" :options="goodsCountOption"></e-charts>
-    <e-charts class="storageAnalysis" :options="storageOption"></e-charts>
   </div>
 </template>
 
@@ -23,8 +35,12 @@ export default {
     return {
       inDate: [],
       outDate: [],
-      goodsCountDate:[],
-      storageDate:[],
+      goodsCountDate: [],
+      storageDate: [],
+      femaleCountDate:[],
+      maleCountDate:[],
+
+      activeName: 'first'
     }
   },
   methods: {
@@ -38,14 +54,25 @@ export default {
       })
 
       //物品库存
-      this.$axios.get(this.$httpUrl + '/goods/analysis').then(res=>{
+      this.$axios.get(this.$httpUrl + '/goods/analysis').then(res => {
         this.goodsCountDate = res.data;
       })
 
       //仓库库存
-      this.$axios.get(this.$httpUrl + '/storage/analysis').then(res=>{
+      this.$axios.get(this.$httpUrl + '/storage/analysis').then(res => {
         this.storageDate = res.data;
       })
+
+      //用户信息
+      this.$axios.get(this.$httpUrl + '/user/analysisMale').then(res=>{
+        this.maleCountDate = res.data
+      })
+      this.$axios.get(this.$httpUrl + '/user/analysisFemale').then(res=>{
+        this.femaleCountDate = res.data
+      })
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
     }
   },
   computed: {
@@ -123,8 +150,8 @@ export default {
         ]
       }
     },
-    goodsCountOption(){
-      return{
+    goodsCountOption() {
+      return {
         tooltip: {
           trigger: 'item'
         },
@@ -132,7 +159,7 @@ export default {
           top: '1%',
           left: 'center'
         },
-        title:{
+        title: {
           bottom: '1%',
           left: 'center',
           text: '物品分类库存'
@@ -167,8 +194,8 @@ export default {
         ]
       }
     },
-    storageOption(){
-      return{
+    storageOption() {
+      return {
         tooltip: {
           trigger: 'item'
         },
@@ -176,7 +203,7 @@ export default {
           top: '1%',
           left: 'center'
         },
-        title:{
+        title: {
           bottom: '1%',
           left: 'center',
           text: '仓库在库数'
@@ -210,7 +237,58 @@ export default {
           }
         ]
       }
-    }
+    },
+    userInfoOption(){
+       return{
+         tooltip: {
+           trigger: 'axis',
+           axisPointer: {
+             // Use axis to trigger tooltip
+             type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+           }
+         },
+         legend: {},
+         grid: {
+           left: '3%',
+           right: '4%',
+           bottom: '3%',
+           containLabel: true
+         },
+         xAxis: {
+           type: 'category',
+           data: ['超级管理员', '管理员', '用户']
+         },
+         yAxis: {
+           type: 'value'
+         },
+         series: [
+           {
+             name: '女',
+             type: 'bar',
+             stack: 'total',
+             label: {
+               show: true
+             },
+             emphasis: {
+               focus: 'series'
+             },
+             data: this.femaleCountDate
+           },
+           {
+             name: '男',
+             type: 'bar',
+             stack: 'total',
+             label: {
+               show: true
+             },
+             emphasis: {
+               focus: 'series'
+             },
+             data: this.maleCountDate
+           }
+         ]
+       }
+    },
   },
   created() {
     this.getDate()
@@ -220,21 +298,24 @@ export default {
 
 <style lang="css" scoped>
 .inOrOutAnalysis {
-  height: 600px;
+  height: 580px;
   width: 800px;
   float: left;
 }
-.goodsCountAnalysis{
+
+.goodsCountAnalysis {
   float: left;
   width: 500px;
   height: 280px;
 }
-.storageAnalysis{
+
+.storageAnalysis {
   float: left;
   width: 500px;
   height: 280px;
 }
-.bu{
+
+.bu {
   float: right;
   margin-right: 50px;
 }

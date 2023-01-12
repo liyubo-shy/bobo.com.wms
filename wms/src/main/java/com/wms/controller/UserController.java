@@ -198,4 +198,35 @@ public class UserController {
         user.setIsDisabled(1);
         userService.updateById(user);
     }
+
+
+    //返回男性用户数量数组
+    @GetMapping("analysisMale")
+    public int[] analysisMale(){
+        LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,0);
+        int countSuperAdmin = userService.count(userLambdaQueryWrapper);
+        userLambdaQueryWrapper.clear();
+        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,1);
+        int countAdmin = userService.count(userLambdaQueryWrapper);
+        userLambdaQueryWrapper.clear();
+        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,2);
+        int countUserAdmin = userService.count(userLambdaQueryWrapper);
+        return new int[]{countSuperAdmin,countAdmin,countUserAdmin};
+    }
+
+    //返回女用户数量数组
+    @GetMapping("analysisFemale")
+    public int[] analysisFemale(){
+        LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,0);
+        int countSuperAdmin = userService.count(userLambdaQueryWrapper);
+        userLambdaQueryWrapper.clear();
+        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,1);
+        int countAdmin = userService.count(userLambdaQueryWrapper);
+        userLambdaQueryWrapper.clear();
+        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,2);
+        int countUserAdmin = userService.count(userLambdaQueryWrapper);
+        return new int[]{countSuperAdmin,countAdmin,countUserAdmin};
+    }
 }
