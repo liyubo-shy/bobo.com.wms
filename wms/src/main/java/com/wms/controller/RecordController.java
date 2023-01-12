@@ -11,6 +11,7 @@ import com.wms.entity.Record;
 import com.wms.service.impl.GoodsServiceImpl;
 import com.wms.service.impl.RecordServiceImpl;
 import com.wms.vo.RecordAnalysisVo;
+import com.wms.vo.RecordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -100,8 +101,9 @@ public class RecordController {
         if (param.get("endDate") != null) {
             endDate = param.get("endDate").toString();
         }
-
-        List<Record> records = recordService.listRecord(
+        Page<RecordVo> page = new Page<>(pageNum, pageSize);
+        Page<RecordVo> records = recordService.listRecord(
+                page,
                 param.get("goods").toString(),
                 param.get("userId").toString(),
                 param.get("adminId").toString(),
@@ -113,10 +115,10 @@ public class RecordController {
                 startDate,
                 endDate
         );
-        System.out.println(records.size());
-        String size_string = records.size() + "";
-        long size = Long.parseLong(size_string);
-        return Result.scu(records, size);
+//        System.out.println(records.size());
+//        String size_string = records.size() + "";
+//        long size = Long.parseLong(size_string);
+        return Result.scu(records.getRecords(), records.getTotal());
     }
 
     @PostMapping("/exportRecord")

@@ -1,7 +1,10 @@
 package com.wms.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.entity.Record;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.vo.RecordVo;
+
 import java.util.List;
 
 /**
@@ -13,7 +16,8 @@ import java.util.List;
  * @since 2022-12-23
  */
 public interface IRecordService extends IService<Record> {
-    List<Record> listRecord (
+    Page<RecordVo> listRecord (
+            Page<RecordVo> page,
             String goods,
             String userId,
             String adminId,

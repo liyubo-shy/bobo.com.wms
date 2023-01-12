@@ -50,7 +50,6 @@
 
 
         order by re.create_date desc) as r
-        limit #{pageNum},#{pageSize}
     </select>
     <select id="exportRecord" resultType="com.wms.vo.ExportRecordVo">
         select *

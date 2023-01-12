@@ -1,10 +1,12 @@
 package com.wms.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.entity.Record;
 import com.wms.mapper.RecordMapper;
 import com.wms.service.IRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.vo.ExportRecordVo;
+import com.wms.vo.RecordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +26,10 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     private RecordMapper recordMapper;
 
     @Override
-    public List<Record> listRecord(String goods, String userId, String adminId, String goodstype, String storage, int pageNum, int pageSize, int inOrOut, String startDate, String endDate) {
+    public Page<RecordVo> listRecord(Page<RecordVo> page, String goods, String userId, String adminId, String goodstype, String storage, int pageNum, int pageSize, int inOrOut, String startDate, String endDate) {
 
         return recordMapper.listRecord(
+                page,
                 goods,
                 userId,
                 adminId,

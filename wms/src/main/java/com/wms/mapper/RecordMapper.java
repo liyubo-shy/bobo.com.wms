@@ -1,7 +1,9 @@
 package com.wms.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.entity.Record;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.vo.RecordVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -19,7 +21,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface RecordMapper extends BaseMapper<Record> {
-    List<Record> listRecord(
+    Page<RecordVo> listRecord(
+            @Param("page")Page<RecordVo> page,
             @Param("goods") String goods,
             @Param("userId") String userId,
             @Param("adminId") String adminId,
