@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -23,5 +25,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Override
     public void updateIsDisabled(int id) {
         goodsMapper.updateIsDisabled(id);
+    }
+
+    @Override
+    public List<Goods> analysis() {
+        return goodsMapper.analysis();
     }
 }

@@ -5,4 +5,7 @@
     <update id="updateIsDisabled">
         update goods set is_disabled = '1' where id = #{id}
     </update>
+    <select id="analysis" resultType="com.wms.vo.GoodsAnalysisVo">
+        select name, count as value from goods
+    </select>
 </mapper>

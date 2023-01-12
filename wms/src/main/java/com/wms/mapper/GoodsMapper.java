@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -18,4 +20,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GoodsMapper extends BaseMapper<Goods> {
     void updateIsDisabled (@Param("id") int id);
+    List<Goods> analysis ();
 }

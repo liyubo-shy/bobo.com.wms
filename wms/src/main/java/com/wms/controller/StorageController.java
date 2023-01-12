@@ -86,4 +86,9 @@ public class StorageController {
             storageService.removeById(id);
         }
     }
+
+    @GetMapping("/analysis")
+    public List<Storage> analysis (){
+        return storageService.analysis();
+    }
 }

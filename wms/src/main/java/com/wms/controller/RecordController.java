@@ -192,16 +192,10 @@ public class RecordController {
 
     @GetMapping("/recordInAnalysis")
     public List<Record> recordInAnalysis(){
-        List<Record> records = recordService.recordInAnalysis();
-        System.out.println("!!!!!!!!!");
-        System.out.println(records);
-        return records;
+        return recordService.recordInAnalysis();
     }
     @GetMapping("/recordOutAnalysis")
     public List<Record> recordOutAnalysis(){
-        List<Record> records = recordService.recordOutAnalysis();
-        System.out.println("!!!!!!!!!");
-        System.out.println(records);
-        return records;
+        return recordService.recordOutAnalysis();
     }
 }

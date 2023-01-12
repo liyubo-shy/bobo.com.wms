@@ -108,4 +108,10 @@ public class GoodsController {
         goodsService.updateById(goods);
     }
 
+    //饼图数据
+    @GetMapping("/analysis")
+    public List<Goods> analysis (){
+        return goodsService.analysis();
+    }
+
 }

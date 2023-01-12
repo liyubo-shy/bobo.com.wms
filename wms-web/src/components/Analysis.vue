@@ -4,7 +4,9 @@
       <el-breadcrumb-item :to="{ path: '/Analysis' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>报表</el-breadcrumb-item>
     </el-breadcrumb>
-    <e-charts class="inOrOutAnalysis" :options="option"></e-charts>
+    <e-charts class="inOrOutAnalysis" :options="inOrOutOption"></e-charts>
+    <e-charts class="goodsCountAnalysis" :options="goodsCountOption"></e-charts>
+    <e-charts class="storageAnalysis" :options="storageOption"></e-charts>
   </div>
 </template>
 
@@ -18,22 +20,33 @@ export default {
     return {
       inDate: [],
       outDate: [],
-
-
+      goodsCountDate:[],
+      storageDate:[],
     }
   },
   methods: {
     getDate() {
+      //出入库月报
       this.$axios.get(this.$httpUrl + '/record/recordInAnalysis').then(res => {
         this.inDate = res.data;
       })
       this.$axios.get(this.$httpUrl + '/record/recordOutAnalysis').then(res => {
         this.outDate = res.data;
       })
+
+      //物品库存
+      this.$axios.get(this.$httpUrl + '/goods/analysis').then(res=>{
+        this.goodsCountDate = res.data;
+      })
+
+      //仓库库存
+      this.$axios.get(this.$httpUrl + '/storage/analysis').then(res=>{
+        this.storageDate = res.data;
+      })
     }
   },
   computed: {
-    option() {
+    inOrOutOption() {
       return {
         // Make gradient line here
         visualMap: [
@@ -55,11 +68,12 @@ export default {
         ],
         title: [
           {
+            bottom: '50%',
             left: 'center',
             text: '入库月报'
           },
           {
-            top: '55%',
+            bottom: '1%',
             left: 'center',
             text: '出库月报'
           }
@@ -105,6 +119,94 @@ export default {
           }
         ]
       }
+    },
+    goodsCountOption(){
+      return{
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          top: '1%',
+          left: 'center'
+        },
+        title:{
+          bottom: '1%',
+          left: 'center',
+          text: '物品库存数'
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderRadius: 15,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: 15,
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: this.goodsCountDate
+          }
+        ]
+      }
+    },
+    storageOption(){
+      return{
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          top: '1%',
+          left: 'center'
+        },
+        title:{
+          bottom: '1%',
+          left: 'center',
+          text: '仓库库存数'
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderRadius: 15,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: 15,
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: this.storageDate
+          }
+        ]
+      }
     }
   },
   created() {
@@ -116,6 +218,17 @@ export default {
 <style lang="css" scoped>
 .inOrOutAnalysis {
   height: 600px;
-  width: 1000px;
+  width: 800px;
+  float: left;
+}
+.goodsCountAnalysis{
+  float: left;
+  width: 500px;
+  height: 300px;
+}
+.storageAnalysis{
+  float: left;
+  width: 500px;
+  height: 300px;
 }
 </style>
