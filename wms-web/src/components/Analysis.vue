@@ -251,8 +251,13 @@ export default {
          grid: {
            left: '3%',
            right: '4%',
-           bottom: '3%',
+           bottom: '10%',
            containLabel: true
+         },
+         title: {
+           bottom:'1%',
+           left: 'center',
+           text: '角色性别分布'
          },
          xAxis: {
            type: 'category',
@@ -314,7 +319,9 @@ export default {
   width: 500px;
   height: 280px;
 }
-
+.userInfoAnalysis{
+  border: #430400 1px solid;
+}
 .bu {
   float: right;
   margin-right: 50px;
