@@ -202,31 +202,49 @@ public class UserController {
 
     //返回男性用户数量数组
     @GetMapping("analysisMale")
-    public int[] analysisMale(){
+    public Integer[] analysisMale(){
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,0);
-        int countSuperAdmin = userService.count(userLambdaQueryWrapper);
+        Integer countSuperAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
         userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,1);
-        int countAdmin = userService.count(userLambdaQueryWrapper);
+        Integer countAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
         userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,2);
-        int countUserAdmin = userService.count(userLambdaQueryWrapper);
-        return new int[]{countSuperAdmin,countAdmin,countUserAdmin};
+        Integer countUserAdmin = userService.count(userLambdaQueryWrapper);
+        if (countSuperAdmin == 0){
+            countSuperAdmin = null;
+        }
+        if (countAdmin == 0){
+            countAdmin = null;
+        }
+        if (countUserAdmin == 0){
+            countUserAdmin = null;
+        }
+        return new Integer[]{countSuperAdmin,countAdmin,countUserAdmin};
     }
 
     //返回女用户数量数组
     @GetMapping("analysisFemale")
-    public int[] analysisFemale(){
+    public Integer[] analysisFemale(){
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,0);
-        int countSuperAdmin = userService.count(userLambdaQueryWrapper);
+        Integer countSuperAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
         userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,1);
-        int countAdmin = userService.count(userLambdaQueryWrapper);
+        Integer countAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
         userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,2);
-        int countUserAdmin = userService.count(userLambdaQueryWrapper);
-        return new int[]{countSuperAdmin,countAdmin,countUserAdmin};
+        Integer countUserAdmin = userService.count(userLambdaQueryWrapper);
+        if (countSuperAdmin == 0){
+            countSuperAdmin = null;
+        }
+        if (countAdmin == 0){
+            countAdmin = null;
+        }
+        if (countUserAdmin == 0){
+            countUserAdmin = null;
+        }
+        return new Integer[]{countSuperAdmin,countAdmin,countUserAdmin};
     }
 }
