@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.from.UserUpdateIsD;
+import com.wms.vo.UserAgeAnalysisVo;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -19,4 +22,7 @@ public interface IUserService extends IService<User> {
     void removeByNo (Integer[] no);
     Boolean myUpdate (Integer id,String name,Integer age,String phone,Integer sex);
     void updateIsDisabled(User user);
+
+    List<UserAgeAnalysisVo> userAgeAnalysis();
+
 }

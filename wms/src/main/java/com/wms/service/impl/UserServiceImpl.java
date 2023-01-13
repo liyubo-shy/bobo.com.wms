@@ -6,10 +6,12 @@ import com.wms.from.UserUpdateIsD;
 import com.wms.mapper.UserMapper;
 import com.wms.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wms.vo.UserAgeAnalysisVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -46,5 +48,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public void updateIsDisabled(User user) {
         userMapper.updateIsDisabled(user.getId());
+    }
+
+    @Override
+    public List<UserAgeAnalysisVo> userAgeAnalysis(){
+        return userMapper.userAgeAnalysis();
     }
 }

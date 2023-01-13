@@ -2,6 +2,7 @@ package com.wms.mapper;
 
 import com.wms.entity.Goods;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.vo.GoodsAnalysisVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -20,5 +21,5 @@ import java.util.List;
 @Repository
 public interface GoodsMapper extends BaseMapper<Goods> {
     void updateIsDisabled (@Param("id") int id);
-    List<Goods> analysis ();
+    List<GoodsAnalysisVo> analysis ();
 }

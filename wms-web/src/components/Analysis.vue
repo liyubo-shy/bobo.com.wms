@@ -16,8 +16,10 @@
           <div class="bu">
             <el-button icon="el-icon-refresh" @click="getDate()" type="primary" style="float: right;"></el-button>
           </div>
-          <div style="border: #42b983 1px solid; width: 1320px; height:580px">
+          <div style="width: 600px;height: 50px;clear: left"></div>
+          <div style=" width: 1320px; height:500px">
             <e-charts class="userInfoAnalysis" :options="userInfoOption"></e-charts>
+            <e-charts class="userAgeAnalysis" :options="userAgeOption"></e-charts>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -37,8 +39,9 @@ export default {
       outDate: [],
       goodsCountDate: [],
       storageDate: [],
-      femaleCountDate:[],
-      maleCountDate:[],
+      femaleCountDate: [],
+      maleCountDate: [],
+      userAgeDate: [],
 
       activeName: 'first'
     }
@@ -64,12 +67,18 @@ export default {
       })
 
       //用户信息
-      this.$axios.get(this.$httpUrl + '/user/analysisMale').then(res=>{
+      this.$axios.get(this.$httpUrl + '/user/analysisMale').then(res => {
         this.maleCountDate = res.data
       })
-      this.$axios.get(this.$httpUrl + '/user/analysisFemale').then(res=>{
+      this.$axios.get(this.$httpUrl + '/user/analysisFemale').then(res => {
         this.femaleCountDate = res.data
       })
+
+      //用户年龄
+      this.$axios.get(this.$httpUrl + '/user/userAgeAnalysis').then(res => {
+        this.userAgeDate = res.data
+      })
+
     },
     handleClick(tab, event) {
       console.log(tab, event);
@@ -238,61 +247,111 @@ export default {
         ]
       }
     },
-    userInfoOption(){
-       return{
-         tooltip: {
-           trigger: 'axis',
-           axisPointer: {
-             // Use axis to trigger tooltip
-             type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-           }
-         },
-         legend: {},
-         grid: {
-           left: '3%',
-           right: '4%',
-           bottom: '10%',
-           containLabel: true
-         },
-         title: {
-           bottom:'1%',
-           left: 'center',
-           text: '角色性别分布'
-         },
-         xAxis: {
-           type: 'category',
-           data: ['超级管理员', '管理员', '用户']
-         },
-         yAxis: {
-           type: 'value'
-         },
-         series: [
-           {
-             name: '女',
-             type: 'bar',
-             stack: 'total',
-             label: {
-               show: true
-             },
-             emphasis: {
-               focus: 'series'
-             },
-             data: this.femaleCountDate
-           },
-           {
-             name: '男',
-             type: 'bar',
-             stack: 'total',
-             label: {
-               show: true
-             },
-             emphasis: {
-               focus: 'series'
-             },
-             data: this.maleCountDate
-           }
-         ]
-       }
+    userInfoOption() {
+      return {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // Use axis to trigger tooltip
+            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '10%',
+          containLabel: true
+        },
+        title: {
+          bottom: '1%',
+          left: 'center',
+          text: '角色性别分布'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['超级管理员', '管理员', '用户']
+        },
+        yAxis: {
+          type: 'value',
+          name: '人数'
+        },
+        series: [
+          {
+            name: '女',
+            type: 'bar',
+            stack: 'total',
+            label: {
+              show: true
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: this.femaleCountDate
+          },
+          {
+            name: '男',
+            type: 'bar',
+            stack: 'total',
+            label: {
+              show: true
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: this.maleCountDate
+          }
+        ]
+      }
+    },
+    userAgeOption() {
+      return {
+        visualMap: [
+          {
+            show: false,
+            type: 'continuous',
+            seriesIndex: 0,
+            min: 0,
+            max: 22
+          },
+        ],
+        title: [
+          {
+            bottom: '1',
+            left: 'center',
+            text: '用户年龄分布'
+          },
+
+        ],
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis:
+          {
+            name:'岁',
+            data: this.userAgeDate.map(d => d.age)
+          },
+
+
+        yAxis: [
+          {},
+
+        ],
+        grid: [
+          {
+            bottom: '15%'
+          },
+
+        ],
+        series: [
+          {
+            type: 'bar',
+            showSymbol: false,
+            data: this.userAgeDate.map(d => d.count)
+          },
+
+        ]
+      }
     },
   },
   created() {
@@ -319,11 +378,30 @@ export default {
   width: 500px;
   height: 280px;
 }
-.userInfoAnalysis{
-  border: #430400 1px solid;
+
+.userInfoAnalysis {
+  /*border: #430400 1px solid;*/
+  float: left;
+  width: 660px;
+
 }
+
+.userAgeAnalysis {
+  float: left;
+  margin-left: 50px;
+  width: 600px;
+  height: 400px;
+  /*width: 650px;*/
+
+}
+
 .bu {
   float: right;
   margin-right: 50px;
 }
+
+* {
+  /*border: #42b983 1px solid;*/
+}
 </style>
+

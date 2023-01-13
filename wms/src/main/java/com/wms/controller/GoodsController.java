@@ -11,6 +11,7 @@ import com.wms.entity.Goods;
 import com.wms.entity.Goodstype;
 import com.wms.service.impl.GoodsServiceImpl;
 import com.wms.service.impl.GoodstypeServiceImpl;
+import com.wms.vo.GoodsAnalysisVo;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -110,7 +111,7 @@ public class GoodsController {
 
     //饼图数据
     @GetMapping("/analysis")
-    public List<Goods> analysis (){
+    public List<GoodsAnalysisVo> analysis (){
         return goodsService.analysis();
     }
 

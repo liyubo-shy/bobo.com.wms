@@ -4,19 +4,105 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.mapper.UserMapper">
     <update id="myUpdate">
-        update user set age = #{1} where id = #{0}
+        update user
+        set age = #{1}
+        where id = #{0}
     </update>
     <update id="updateIsDisabled">
-        update user set is_disabled = 1 where id = #{id}
+        update user
+        set is_disabled = 1
+        where id = #{id}
     </update>
 
     <delete id="removeByNo">
-        delete from user where no in #{no}
+        delete
+        from user
+        where no in #{no}
     </delete>
     <select id="listAll" resultType="com.wms.entity.User">
-        select * from user
+        select *
+        from user
     </select>
     <select id="pageC" resultType="com.wms.entity.User">
-        select * from user
+        select *
+        from user
+    </select>
+    <select id="userAgeAnalysis" resultType="com.wms.vo.UserAgeAnalysisVo">
+        SELECT age,
+               `count(*)` AS count
+        FROM (
+                 SELECT CONCAT('1', '-', '10') age,
+                        count(*)
+                 FROM `user`
+                 WHERE age >= 1
+                   AND age &lt;= 10
+
+                 UNION
+                 SELECT CONCAT('11', '-', '20') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 11
+                   AND age &lt;= 20
+
+                 UNION
+                 SELECT CONCAT('21', '-', '30') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 21
+                   AND age &lt;= 30
+
+                 UNION
+                 SELECT CONCAT('31', '-', '40') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 31
+                   AND age &lt;= 40
+
+                 UNION
+                 SELECT CONCAT('41', '-', '50') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 41
+                   AND age &lt;= 50
+
+                 UNION
+                 SELECT CONCAT('51', '-', '60') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 51
+                   AND age &lt;= 60
+
+                 UNION
+                 SELECT CONCAT('61', '-', '70') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 61
+                   AND age &lt;= 70
+
+                 UNION
+                 SELECT CONCAT('71', '-', '80') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 71
+                   AND age &lt;= 80
+
+                 UNION
+                 SELECT CONCAT('81', '-', '90') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 81
+                   AND age &lt;= 90
+
+                 UNION
+                 SELECT CONCAT('91', '-', '100') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 91
+                   AND age &lt;= 100
+
+                 UNION
+                 SELECT CONCAT('101', '-', '110') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 101
+                   AND age &lt;= 110
+
+                 UNION
+                 SELECT CONCAT('111', '-', '120') age, count(*)
+                 FROM `user`
+                 WHERE age &gt;= 111
+                   AND age &lt;= 120
+
+             ) AS r
     </select>
 </mapper>

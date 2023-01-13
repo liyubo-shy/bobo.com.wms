@@ -9,16 +9,14 @@ import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Menu;
 import com.wms.entity.User;
-import com.wms.from.UserUpdateIsD;
+
 import com.wms.service.impl.MenuServiceImpl;
 import com.wms.service.impl.UserServiceImpl;
-import io.swagger.models.auth.In;
-import org.apache.ibatis.annotations.Param;
+import com.wms.vo.UserAgeAnalysisVo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -203,6 +201,7 @@ public class UserController {
     //返回男性用户数量数组
     @GetMapping("analysisMale")
     public Integer[] analysisMale(){
+        //查询出各角色的男性数量
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,0);
         Integer countSuperAdmin = userService.count(userLambdaQueryWrapper);
@@ -212,6 +211,8 @@ public class UserController {
         userLambdaQueryWrapper.clear();
         userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,2);
         Integer countUserAdmin = userService.count(userLambdaQueryWrapper);
+
+        //数量为0则赋值为null
         if (countSuperAdmin == 0){
             countSuperAdmin = null;
         }
@@ -221,6 +222,7 @@ public class UserController {
         if (countUserAdmin == 0){
             countUserAdmin = null;
         }
+        //返回数组
         return new Integer[]{countSuperAdmin,countAdmin,countUserAdmin};
     }
 
@@ -246,5 +248,10 @@ public class UserController {
             countUserAdmin = null;
         }
         return new Integer[]{countSuperAdmin,countAdmin,countUserAdmin};
+    }
+
+    @GetMapping("userAgeAnalysis")
+    public List<UserAgeAnalysisVo> userAgeAnalysis (){
+        return userService.userAgeAnalysis();
     }
 }

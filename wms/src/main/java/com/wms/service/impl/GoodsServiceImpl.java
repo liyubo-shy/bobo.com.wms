@@ -4,6 +4,7 @@ import com.wms.entity.Goods;
 import com.wms.mapper.GoodsMapper;
 import com.wms.service.IGoodsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wms.vo.GoodsAnalysisVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
-    public List<Goods> analysis() {
+    public List<GoodsAnalysisVo> analysis() {
         return goodsMapper.analysis();
     }
 }
