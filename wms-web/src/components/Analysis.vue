@@ -4,7 +4,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="物流信息统计" name="first">
           <div>
-            <e-charts class="inOrOutAnalysis" :options="inOrOutOption"></e-charts>
+            <e-charts class="inOrOutAnalysis" ref="chart" :options="inOrOutOption"></e-charts>
             <div class="bu">
               <el-button icon="el-icon-refresh" @click="getDate()" type="primary" style="float: right;"></el-button>
             </div>
@@ -32,6 +32,7 @@
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Analysis',
+
   data() {
 
     return {
@@ -43,10 +44,16 @@ export default {
       maleCountDate: [],
       userAgeDate: [],
 
-      activeName: 'first'
+      activeName: 'first',
+
+      myChart:null
     }
   },
+  mounted(){
+    this.myChart = this.$echarts.init(this.$refs.chart);
+  },
   methods: {
+
     getDate() {
       //出入库月报
       this.$axios.get(this.$httpUrl + '/record/recordInAnalysis').then(res => {
@@ -156,9 +163,10 @@ export default {
             xAxisIndex: 1,
             yAxisIndex: 1
           }
-        ]
-      }
+        ],
+      };
     },
+
     goodsCountOption() {
       return {
         tooltip: {
@@ -312,7 +320,7 @@ export default {
             type: 'continuous',
             seriesIndex: 0,
             min: 0,
-            max: 22
+            max: 6
           },
         ],
         title: [
@@ -354,6 +362,7 @@ export default {
       }
     },
   },
+
   created() {
     this.getDate()
   }

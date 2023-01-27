@@ -9,6 +9,7 @@ import com.wms.common.Result;
 import com.wms.entity.Storage;
 import com.wms.entity.User;
 import com.wms.service.impl.StorageServiceImpl;
+import com.wms.vo.StorageAnalysisVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,7 +89,7 @@ public class StorageController {
     }
 
     @GetMapping("/analysis")
-    public List<Storage> analysis (){
+    public List<StorageAnalysisVo> analysis (){
         return storageService.analysis();
     }
 }

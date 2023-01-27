@@ -203,13 +203,13 @@ public class UserController {
     public Integer[] analysisMale(){
         //查询出各角色的男性数量
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,0);
+        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,0).eq(User :: getIsDisabled,0);
         Integer countSuperAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
-        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,1);
+        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,1).eq(User :: getIsDisabled,0);
         Integer countAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
-        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,2);
+        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,2).eq(User :: getIsDisabled,0);
         Integer countUserAdmin = userService.count(userLambdaQueryWrapper);
 
         //数量为0则赋值为null
@@ -230,13 +230,13 @@ public class UserController {
     @GetMapping("analysisFemale")
     public Integer[] analysisFemale(){
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,0);
+        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,0).eq(User :: getIsDisabled,0);
         Integer countSuperAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
-        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,1);
+        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,1).eq(User :: getIsDisabled,0);
         Integer countAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
-        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,2);
+        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,2).eq(User :: getIsDisabled,0);
         Integer countUserAdmin = userService.count(userLambdaQueryWrapper);
         if (countSuperAdmin == 0){
             countSuperAdmin = null;

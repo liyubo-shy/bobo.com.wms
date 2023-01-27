@@ -1,6 +1,5 @@
 package com.wms.vo;
 
-import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
