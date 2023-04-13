@@ -183,7 +183,7 @@ export default {
         },
         series: [
           {
-            name: 'Access From',
+            name: '库存',
             type: 'pie',
             radius: ['40%', '70%'],
             avoidLabelOverlap: false,
@@ -227,7 +227,7 @@ export default {
         },
         series: [
           {
-            name: 'Access From',
+            name: '在库数',
             type: 'pie',
             radius: ['40%', '70%'],
             avoidLabelOverlap: false,

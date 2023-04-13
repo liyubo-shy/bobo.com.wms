@@ -3,6 +3,14 @@
 <mapper namespace="com.wms.mapper.GoodsMapper">
 
     <update id="updateIsDisabled">
-        update goods set is_disabled = '1' where id = #{id}
+        update goods
+        set is_disabled = '1'
+        where id = #{id}
     </update>
+    <select id="analysis" resultType="com.wms.vo.GoodsAnalysisVo">
+        SELECT t.name as name, SUM(count) as value
+        FROM goods g
+                 LEFT JOIN goodstype t ON g.goodsType = t.id
+        GROUP BY goodsType
+    </select>
 </mapper>

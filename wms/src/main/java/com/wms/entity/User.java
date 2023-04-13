@@ -46,6 +46,11 @@ public class User implements Serializable {
      */
     private String password;
 
+    /**
+     * 盐
+     */
+    private String salt;
+
     private Integer age;
 
     /**

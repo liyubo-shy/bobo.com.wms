@@ -43,7 +43,7 @@
 
       <el-button style="margin-left: 5px" type="primary" icon="el-icon-refresh-right" @click="reSet"
                  title="重置"></el-button>
-      <el-button style="margin-left: 5px" icon="el-icon-search" @click="search" type="primary" title="查询"></el-button>
+      <el-button style="margin-left: 5px" icon="el-icon-search" @click="search($event)" type="primary" title="查询"></el-button>
       <span style="margin-left:150px">操作：</span>
       <el-button type="primary" icon="el-icon-plus" @click="add" title="新增"></el-button>
       <el-button type="primary" @click="handle" icon="el-icon-upload2" title="导出"></el-button>
@@ -512,7 +512,6 @@ export default {
 
     loadPost() {
       console.log(Math.floor(this.total / 100))
-
       this.list_loading = true
       this.$axios.post(this.$httpUrl + '/user/listPage1', {
         param: {
@@ -544,7 +543,8 @@ export default {
     },
 
     //查询
-    search() {
+    search(event) {
+      console.log('event',event.path)
       //每次查询后显示第一页
       this.pageNum = 1;
       this.loadPost()
@@ -701,5 +701,6 @@ export default {
 <style scoped>
 
 </style>
+
 
 

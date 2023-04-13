@@ -1,10 +1,13 @@
 package com.wms.controller;
 
 
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wms.common.PasswordUtils;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Menu;
@@ -17,6 +20,7 @@ import com.wms.vo.UserAgeAnalysisVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,21 +43,22 @@ public class UserController {
 
     @GetMapping("/list")
     public List<User> list() {
-        return userService.lambdaQuery().eq(User::getIsDisabled,0).list();
+
+        return userService.lambdaQuery().eq(User::getIsDisabled, 0).list();
     }
 
     @GetMapping("/listUser")
-    public List<User> listUser(){
+    public List<User> listUser() {
         return userService.lambdaQuery()
-                .eq(User::getRoleId,2)
-                .eq(User::getIsDisabled,0).list();
+                .eq(User::getRoleId, 2)
+                .eq(User::getIsDisabled, 0).list();
     }
 
     @GetMapping("/listAdmin")
-    public List<User> listAdmin(){
+    public List<User> listAdmin() {
         return userService.lambdaQuery()
-                .in(User::getRoleId,1,0)
-                .eq(User::getIsDisabled,0).list();
+                .in(User::getRoleId, 1, 0)
+                .eq(User::getIsDisabled, 0).list();
     }
 
     //查询账号是否存在
@@ -62,24 +67,43 @@ public class UserController {
         List<User> list = userService.lambdaQuery().eq(User::getNo, no).list();
         return list.size() > 0 ? Result.scu(list) : Result.fail();
     }
+
     //查询姓名是否存在
     @GetMapping("/findByName")
-    public Result findByName(@RequestParam String name){
-        List<User> list = userService.lambdaQuery().eq(User::getName,name).list();
+    public Result findByName(@RequestParam String name) {
+        List<User> list = userService.lambdaQuery().eq(User::getName, name).list();
         return list.size() > 0 ? Result.scu(list) : Result.fail();
     }
+
     //新增
     @PostMapping("/save")
     public Result save(@RequestBody User user) {
         user.setIsDisabled(0);
+        String salt = PasswordUtils.salt();
+        user.setSalt(salt);
+        user.setPassword(SecureUtil.md5(user.getPassword() + salt));
         return userService.saveOrUpdate(user) ? Result.scu() : Result.fail();
     }
 
     //登录
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
-        List<User> userList = userService.lambdaQuery().eq(User::getNo, user.getNo())
-                .eq(User::getPassword, user.getPassword()).eq(User::getIsDisabled,0).list();
+        LambdaQueryChainWrapper<User> saltQuery = userService.lambdaQuery().select(User::getSalt).eq(User::getNo, user.getNo());
+        List<User> saltList = saltQuery.list();
+        List<User> userList;
+        if (saltList.get(0) == null) {
+            System.out.println("未加密账号");
+            userList = userService.lambdaQuery().eq(User::getNo, user.getNo())
+                    .eq(User::getPassword, user.getPassword()).eq(User::getIsDisabled, 0).list();
+        } else {
+            System.out.println("加密账号");
+            String salt = user.getPassword() + saltList.get(0).getSalt();
+            System.out.println("加密盐：" + salt);
+            userList = userService.lambdaQuery().eq(User::getNo, user.getNo())
+                    .eq(User::getPassword, SecureUtil.md5(user.getPassword() + salt)).eq(User::getIsDisabled, 0).list();
+        }
+
+
         if (userList.size() > 0) {
             User user1 = userList.get(0);
             List<Menu> menuList = menuService.lambdaQuery().like(Menu::getMenuright, user1.getRoleId()).list();
@@ -152,6 +176,7 @@ public class UserController {
     @PostMapping("/listPage1")
     public Result listPage1(@RequestBody QueryPageParam query) {
         //拿到参数的HashMap集合
+        System.out.println("wahaha");
         HashMap param = query.getParam();
         //分页
         Page<User> page = new Page<>();
@@ -200,58 +225,58 @@ public class UserController {
 
     //返回男性用户数量数组
     @GetMapping("analysisMale")
-    public Integer[] analysisMale(){
+    public Integer[] analysisMale() {
         //查询出各角色的男性数量
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,0).eq(User :: getIsDisabled,0);
+        userLambdaQueryWrapper.eq(User::getSex, 1).eq(User::getRoleId, 0).eq(User::getIsDisabled, 0);
         Integer countSuperAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
-        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,1).eq(User :: getIsDisabled,0);
+        userLambdaQueryWrapper.eq(User::getSex, 1).eq(User::getRoleId, 1).eq(User::getIsDisabled, 0);
         Integer countAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
-        userLambdaQueryWrapper.eq(User::getSex,1).eq(User::getRoleId,2).eq(User :: getIsDisabled,0);
+        userLambdaQueryWrapper.eq(User::getSex, 1).eq(User::getRoleId, 2).eq(User::getIsDisabled, 0);
         Integer countUserAdmin = userService.count(userLambdaQueryWrapper);
 
         //数量为0则赋值为null
-        if (countSuperAdmin == 0){
+        if (countSuperAdmin == 0) {
             countSuperAdmin = null;
         }
-        if (countAdmin == 0){
+        if (countAdmin == 0) {
             countAdmin = null;
         }
-        if (countUserAdmin == 0){
+        if (countUserAdmin == 0) {
             countUserAdmin = null;
         }
         //返回数组
-        return new Integer[]{countSuperAdmin,countAdmin,countUserAdmin};
+        return new Integer[]{countSuperAdmin, countAdmin, countUserAdmin};
     }
 
     //返回女用户数量数组
     @GetMapping("analysisFemale")
-    public Integer[] analysisFemale(){
+    public Integer[] analysisFemale() {
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,0).eq(User :: getIsDisabled,0);
+        userLambdaQueryWrapper.eq(User::getSex, 0).eq(User::getRoleId, 0).eq(User::getIsDisabled, 0);
         Integer countSuperAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
-        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,1).eq(User :: getIsDisabled,0);
+        userLambdaQueryWrapper.eq(User::getSex, 0).eq(User::getRoleId, 1).eq(User::getIsDisabled, 0);
         Integer countAdmin = userService.count(userLambdaQueryWrapper);
         userLambdaQueryWrapper.clear();
-        userLambdaQueryWrapper.eq(User::getSex,0).eq(User::getRoleId,2).eq(User :: getIsDisabled,0);
+        userLambdaQueryWrapper.eq(User::getSex, 0).eq(User::getRoleId, 2).eq(User::getIsDisabled, 0);
         Integer countUserAdmin = userService.count(userLambdaQueryWrapper);
-        if (countSuperAdmin == 0){
+        if (countSuperAdmin == 0) {
             countSuperAdmin = null;
         }
-        if (countAdmin == 0){
+        if (countAdmin == 0) {
             countAdmin = null;
         }
-        if (countUserAdmin == 0){
+        if (countUserAdmin == 0) {
             countUserAdmin = null;
         }
-        return new Integer[]{countSuperAdmin,countAdmin,countUserAdmin};
+        return new Integer[]{countSuperAdmin, countAdmin, countUserAdmin};
     }
 
     @GetMapping("userAgeAnalysis")
-    public List<UserAgeAnalysisVo> userAgeAnalysis (){
+    public List<UserAgeAnalysisVo> userAgeAnalysis() {
         return userService.userAgeAnalysis();
     }
 }

@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.mapper.StorageMapper">
 
+    <select id="analysis" resultType="com.wms.vo.StorageAnalysisVo">
+        SELECT s.name as name, sum(g.count) as value
+        FROM goods g
+                 LEFT JOIN storage s ON g.storage = s.id
+        GROUP BY g.storage
+    </select>
 </mapper>
