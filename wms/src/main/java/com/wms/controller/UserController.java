@@ -13,6 +13,7 @@ import com.wms.common.Result;
 import com.wms.entity.Menu;
 import com.wms.entity.User;
 
+import com.wms.mapper.UserMapper;
 import com.wms.service.impl.MenuServiceImpl;
 import com.wms.service.impl.UserServiceImpl;
 import com.wms.vo.UserAgeAnalysisVo;
@@ -40,6 +41,8 @@ public class UserController {
     private UserServiceImpl userService;
     @Autowired
     private MenuServiceImpl menuService;
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("/list")
     public List<User> list() {
@@ -97,7 +100,7 @@ public class UserController {
                     .eq(User::getPassword, user.getPassword()).eq(User::getIsDisabled, 0).list();
         } else {
             System.out.println("加密账号");
-            String salt = user.getPassword() + saltList.get(0).getSalt();
+            String salt = saltList.get(0).getSalt();
             System.out.println("加密盐：" + salt);
             userList = userService.lambdaQuery().eq(User::getNo, user.getNo())
                     .eq(User::getPassword, SecureUtil.md5(user.getPassword() + salt)).eq(User::getIsDisabled, 0).list();
@@ -278,5 +281,21 @@ public class UserController {
     @GetMapping("userAgeAnalysis")
     public List<UserAgeAnalysisVo> userAgeAnalysis() {
         return userService.userAgeAnalysis();
+    }
+
+    @GetMapping("updatePassword")
+    public String updatePassword(){
+        List<User> saltIsNull = userMapper.findSaltIsNull();
+        int total = saltIsNull.size();
+        int done = 0;
+        if (total != 0){
+            for (User user : saltIsNull){
+                String salt = PasswordUtils.salt();
+                String newPassword = SecureUtil.md5(user.getPassword()+salt);
+                userMapper.updatePasswordAndSalt(user.getId(),salt,newPassword);
+                done++;
+            }
+        }
+        return total+"条数据需要更新,已完成"+done+"条";
     }
 }

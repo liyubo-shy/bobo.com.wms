@@ -13,6 +13,9 @@
         set is_disabled = 1
         where id = #{id}
     </update>
+    <update id="updatePasswordAndSalt">
+        update user set salt = #{salt},password=#{password} where id = #{id};
+    </update>
 
     <delete id="removeByNo">
         delete
@@ -127,5 +130,9 @@
 
 
              ) AS r
+    </select>
+    <select id="findSaltIsNull" resultType="com.wms.entity.User">
+      select * from user where salt is null
+
     </select>
 </mapper>

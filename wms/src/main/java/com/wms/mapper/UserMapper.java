@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wms.vo.UserAgeAnalysisVo;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,6 +28,8 @@ public interface UserMapper extends BaseMapper<User> {
     void myUpdate(String name,Integer age,String phone,Integer sex);
     void updateIsDisabled(Integer id);
     List<UserAgeAnalysisVo> userAgeAnalysis ();
+    List<User> findSaltIsNull();
+    void updatePasswordAndSalt(@Param("id") int id, @Param("salt") String salt, @Param("password") String password);
 
 
 }
