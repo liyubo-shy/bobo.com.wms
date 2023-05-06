@@ -14,6 +14,8 @@ import com.wms.entity.Menu;
 import com.wms.entity.User;
 
 import com.wms.mapper.UserMapper;
+import com.wms.service.IMenuService;
+import com.wms.service.IUserService;
 import com.wms.service.impl.MenuServiceImpl;
 import com.wms.service.impl.UserServiceImpl;
 import com.wms.vo.UserAgeAnalysisVo;
@@ -21,6 +23,9 @@ import com.wms.vo.UserAgeAnalysisVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +43,9 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserServiceImpl userService;
+    private IUserService userService;
     @Autowired
-    private MenuServiceImpl menuService;
+    private IMenuService menuService;
     @Autowired
     private UserMapper userMapper;
 
@@ -91,32 +96,8 @@ public class UserController {
     //登录
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
-        LambdaQueryChainWrapper<User> saltQuery = userService.lambdaQuery().select(User::getSalt).eq(User::getNo, user.getNo());
-        List<User> saltList = saltQuery.list();
-        List<User> userList;
-        if (saltList.get(0) == null) {
-            System.out.println("未加密账号");
-            userList = userService.lambdaQuery().eq(User::getNo, user.getNo())
-                    .eq(User::getPassword, user.getPassword()).eq(User::getIsDisabled, 0).list();
-        } else {
-            System.out.println("加密账号");
-            String salt = saltList.get(0).getSalt();
-            System.out.println("加密盐：" + salt);
-            userList = userService.lambdaQuery().eq(User::getNo, user.getNo())
-                    .eq(User::getPassword, SecureUtil.md5(user.getPassword() + salt)).eq(User::getIsDisabled, 0).list();
-        }
+        return userService.login1(user);
 
-
-        if (userList.size() > 0) {
-            User user1 = userList.get(0);
-            List<Menu> menuList = menuService.lambdaQuery().like(Menu::getMenuright, user1.getRoleId()).list();
-            HashMap res = new HashMap();
-            res.put("user", user1);
-            res.put("menu", menuList);
-            return Result.scu(res);
-        } else {
-            return Result.fail();
-        }
     }
 
     //删除
@@ -298,4 +279,20 @@ public class UserController {
         }
         return total+"条数据需要更新,已完成"+done+"条";
     }
+
+    @GetMapping("test")
+    public String test(HttpServletRequest request, HttpServletResponse response){
+        System.out.println(request);
+        String token = request.getHeader("authorization");
+
+        System.out.println("token:"+token);
+        return token;
+    }
+
+    @GetMapping("clear")
+    public Result clear(HttpServletRequest request){
+        return userService.clearToken(request);
+
+    }
+
 }

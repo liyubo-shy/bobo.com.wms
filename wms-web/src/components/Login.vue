@@ -56,6 +56,7 @@ export default {
               // console.log('res.data:',res.data)
               // console.log("res.data.user:",res.data.name)
               sessionStorage.setItem("CurUser", JSON.stringify(res.data))
+
               // console.log("session:"+sessionStorage.getItem("CurUser"))
               // console.log(res.data.menu, '-------')
               this.$store.commit("setMenu", res.data.menu)

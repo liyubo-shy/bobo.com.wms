@@ -51,8 +51,14 @@ export default {
         confirmButtonText: "确定",
         type: 'warning'
       }).then(() => {
+        this.$axios.get(this.$httpUrl + '/user/clear').then(res=>{
+          console.log(res)
+          if (res.data.code === 200){
+            console.log('清token')
+            sessionStorage.clear();
+          }
+        })
         this.$router.push('/');
-        sessionStorage.clear();
 
         this.$message({
           type: 'success',

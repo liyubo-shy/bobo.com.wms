@@ -313,7 +313,7 @@ export default {
     //点击表单的取消按钮，清除验证结果
 
     loadPost() {
-
+      console.log(JSON.parse(sessionStorage.getItem('CurUser')).token)
       this.list_loading = true
       this.$axios.post(this.$httpUrl + '/goodstype/listPage1', {
         param: {

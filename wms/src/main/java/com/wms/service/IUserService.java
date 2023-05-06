@@ -1,12 +1,14 @@
 package com.wms.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wms.common.Result;
 import com.wms.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.from.UserUpdateIsD;
 import com.wms.vo.UserAgeAnalysisVo;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -25,4 +27,7 @@ public interface IUserService extends IService<User> {
 
     List<UserAgeAnalysisVo> userAgeAnalysis();
 
+    Result login1(User user);
+
+    Result clearToken(HttpServletRequest request);
 }
